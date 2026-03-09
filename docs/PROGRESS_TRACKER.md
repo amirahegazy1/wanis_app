@@ -16,7 +16,8 @@
 
 | Phase | Description                         | Notes                                                                                                                              |
 |-------|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| 1     | Dependencies & Firebase Integration | Added core dependencies in `pubspec.yaml`: Firebase, auth providers, camera, AI, BLoC, and audio. Firebase platform setup remains. |
+| 1     | Dependencies & Firebase Integration | Added core dependencies in `pubspec.yaml`: Firebase, auth providers, camera, AI, BLoC, and audio. Firebase connection established. |
+| 3     | Firebase Auth & Parent Dashboard    | In progress: Models and base services (Auth/Firestore) created. Parent dashboard and CRUD functionality remaining.                  |
 
 ---
 
@@ -25,7 +26,6 @@
 | Phase | Description                            | Notes                                                                                              |
 |-------|----------------------------------------|----------------------------------------------------------------------------------------------------|
 | 2     | Core Layer & Theme Setup               | Implement shared utilities, app theme, routing, and dependency injection scaffold.                  |
-| 3     | Firebase Auth & Parent Dashboard       | Build authentication flow and parent-facing screens (child profile CRUD, settings).                 |
 | 4     | Emotion Detection Module               | Integrate `.tflite` model, camera feed, and on-device inference pipeline.                           |
 | 5     | Emotion Router & Strategy Pattern      | Implement `EmotionRouter`, concrete strategies, and emotion-to-content mapping.                     |
 | 6     | Child Interface                        | Build calming exercises, interactive stories, and soothing music screens.                           |
