@@ -14,9 +14,9 @@
 
 ## In Progress
 
-| Phase | Description | Notes |
-|-------|-------------|-------|
-| --    | --          | --    |
+| Phase | Description                         | Notes                                                                                                                              |
+|-------|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| 1     | Dependencies & Firebase Integration | Added core dependencies in `pubspec.yaml`: Firebase, auth providers, camera, AI, BLoC, and audio. Firebase platform setup remains. |
 
 ---
 
@@ -24,7 +24,6 @@
 
 | Phase | Description                            | Notes                                                                                              |
 |-------|----------------------------------------|----------------------------------------------------------------------------------------------------|
-| 1     | Dependencies & Firebase Integration    | Add `flutter_bloc`, `firebase_core`, `firebase_auth`, `cloud_firestore`, `tflite_flutter`, `get_it` and other required packages. Configure Firebase for Android & iOS. |
 | 2     | Core Layer & Theme Setup               | Implement shared utilities, app theme, routing, and dependency injection scaffold.                  |
 | 3     | Firebase Auth & Parent Dashboard       | Build authentication flow and parent-facing screens (child profile CRUD, settings).                 |
 | 4     | Emotion Detection Module               | Integrate `.tflite` model, camera feed, and on-device inference pipeline.                           |
