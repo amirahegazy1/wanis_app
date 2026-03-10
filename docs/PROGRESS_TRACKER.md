@@ -17,6 +17,9 @@
 | —     | Customise `main.dart`      | Replaced default counter template with `WanisApp`. Readex Pro set as app-wide default font. Starting screen: `OnboardingSplashScreen`.       |
 | —     | Declare Assets             | `assets/images/` declared in `pubspec.yaml`.                                                                                                 |
 | —     | Stub Screens               | Created placeholder `AppEntryScreen`, `ParentShellScreen`, and `parent_providers.dart` so onboarding navigation compiles.                     |
+| —     | Wire Firebase Initialisation| Added `Firebase.initializeApp()` in `main.dart` using `DefaultFirebaseOptions`.                                                            |
+| 3.1   | Home & Stories UI          | Implemented 14 Figma screens/components (`home_screen`, `stories_list`, player, interactive question, and `AnswerFeedbackDialog` overlay).|
+| —     | Post-Login Nav & Google Fix| `AppEntryScreen` now routes to `HomeScreen`. Google/Apple Sign-In no longer navigates on cancellation (`null` result check). `onboarding_add_child_screen` updated to use `AppEntryScreen`.|
 
 ---
 
@@ -24,8 +27,6 @@
 
 | Phase | Description                               | Notes                                                                                                                                                                            |
 |-------|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| —     | Wire Firebase Initialisation              | Need to add `Firebase.initializeApp()` in `main.dart` using `DefaultFirebaseOptions`.                                                                                            |
-
 ---
 
 ## To-Do

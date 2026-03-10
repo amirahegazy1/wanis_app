@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../parent/presentation/screens/parent_shell_screen.dart';
+import '../../../auth/presentation/screens/auth_entry_screen.dart';
 import 'onboarding_shared.dart';
 
 /// Figma-faithful add-child onboarding screen (node `4:59`).
@@ -126,7 +126,7 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
                     // TODO: Save child name & avatar via BLoC/repository
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (_) => const ParentShellScreen()),
+                      MaterialPageRoute(builder: (_) => const AppEntryScreen()),
                       (_) => false,
                     );
                   },

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-/// Placeholder entry screen loaded after authentication.
+import '../../../home/presentation/screens/home_screen.dart';
+
+/// Entry screen loaded after authentication.
 ///
-/// This is a temporary stub that will be replaced by the full
-/// parent dashboard once that feature is implemented.
+/// Routes the authenticated user to the main [HomeScreen].
 class AppEntryScreen extends StatelessWidget {
   const AppEntryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Welcome to Wanis – Parent Dashboard stub')),
-    );
+    return const HomeScreen();
   }
 }

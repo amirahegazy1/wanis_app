@@ -68,7 +68,13 @@ class _OnboardingSignUpScreenState extends State<OnboardingSignUpScreen> {
       _errorMessage = null;
     });
     try {
-      await action();
+      final result = await action();
+      // If the auth action returned null (e.g. user cancelled Google Sign-In),
+      // don't navigate – just stop loading.
+      if (result == null) {
+        if (mounted) setState(() => _isLoading = false);
+        return;
+      }
       if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
