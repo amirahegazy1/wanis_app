@@ -35,6 +35,8 @@ Wanis performs real-time facial emotion recognition entirely on-device using a T
 - **Camera integration** -- live feed processed frame-by-frame for continuous detection.
 - **Confidence thresholds** -- only emotions above a configurable confidence level trigger content changes.
 
+> **Implementation note:** The `ClassEmotion` enum in `lib/models/content_item.dart` currently defines 7 values (`happy`, `sad`, `angry`, `fearful`, `surprised`, `neutral`, `disgusted`). The 8th class — *Contempt* — should be added once the TFLite model output labels are confirmed.
+
 ### 2.2 Dual User Flows
 
 #### A) Parent Dashboard
@@ -76,7 +78,7 @@ Content stored in Firestore is tagged with one or more of the 8 emotion classes,
 
 | Platform | Minimum Version |
 |----------|-----------------|
-| Android  | API 21 (5.0)    |
+| Android  | API 26 (8.0)    |
 | iOS      | 12.0            |
 
 ---

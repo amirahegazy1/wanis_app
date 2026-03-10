@@ -64,29 +64,29 @@ graph TB
 - **Data Sources**: Remote (Firebase Auth, Firestore) and Local (TFLite model, cached content, local storage).
 - **Data Models**: Serialisation / deserialisation objects (e.g., Firestore document mappings). Models map to and from Domain entities.
 
-### 2.2 Planned Directory Structure
+### 2.2 Directory Structure
+
+> Items marked ✅ exist; items marked 📋 are planned.
 
 ```
 lib/
-├── core/               # Shared utilities, constants, themes, error handling
+├── firebase_options.dart          ✅  Generated Firebase config
+├── main.dart                      ✅  App entry point (needs customisation)
+├── models/                        ✅  OOP data models
+│   ├── parent_user.dart           ✅
+│   ├── child_profile.dart         ✅
+│   └── content_item.dart          ✅
+├── services/                      ✅  Firebase service wrappers
+│   ├── auth_service.dart          ✅
+│   └── firestore_service.dart     ✅
 ├── features/
-│   ├── auth/           # Firebase authentication
-│   │   ├── data/
-│   │   ├── domain/
-│   │   └── presentation/
-│   ├── emotion_detection/
-│   │   ├── data/       # TFLite data source, model loading
-│   │   ├── domain/     # DetectEmotion use case, Emotion entity
-│   │   └── presentation/
-│   ├── child_interface/
-│   │   ├── data/       # Content data sources (Firestore, local cache)
-│   │   ├── domain/     # Content entities, emotion-routing strategies
-│   │   └── presentation/
-│   └── parent_dashboard/
-│       ├── data/
-│       ├── domain/
-│       └── presentation/
-└── main.dart
+│   ├── onboarding/                ✅  Login, Sign-up, Password reset flows
+│   │   └── presentation/screens/  ✅  (9 screen files + shared widgets)
+│   ├── auth/                      📋  Firebase auth (Clean Arch layers)
+│   ├── emotion_detection/         📋  TFLite data source, inference pipeline
+│   ├── child_interface/           📋  Content screens, emotion-routing strategies
+│   └── parent_dashboard/          📋  Profile management, reports UI
+└── core/                          📋  Shared utilities, constants, themes, routing
 ```
 
 ---
