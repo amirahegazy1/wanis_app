@@ -12,50 +12,63 @@ class OnboardingOtpScreen extends StatelessWidget {
     return OnboardingFrame(
       child: Stack(
         children: [
-          const Positioned(top: 0, left: 0, right: 0, child: OnboardingStatusBar()),
+          
           SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 86, 24, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // Back button
                 Align(
                   alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_rounded),
-                    onPressed: () => Navigator.pop(context),
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.arrow_back_rounded, size: 20),
                   ),
                 ),
                 const SizedBox(height: 18),
-                const Text(
+                // Title – Figma: 28px Bold
+                Text(
                   'تحقق من بريدك 📩',
                   textAlign: TextAlign.right,
-                  style: TextStyle(
+                  style: readexPro(
                     color: OnboardingColors.dark,
-                    fontSize: 42,
+                    fontSize: 28,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'أرسلنا رمزاً مكوناً من 4 أرقام إلى\nexample@mail.com',
+                Text(
+                  'أرسلنا رمزاً مكوناً من 4 أرقام إلى',
                   textAlign: TextAlign.right,
-                  style: TextStyle(color: OnboardingColors.muted, fontSize: 16, height: 1.4),
+                  style: readexPro(color: OnboardingColors.muted, fontSize: 16),
+                ),
+                Text(
+                  'example@mail.com',
+                  textAlign: TextAlign.right,
+                  style: readexPro(color: OnboardingColors.muted, fontSize: 16),
                 ),
                 const SizedBox(height: 22),
                 const _OtpBoxes(),
                 const SizedBox(height: 22),
-                const Text.rich(
+                Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(text: 'إعادة الإرسال في '),
+                      TextSpan(
+                        text: 'إعادة الإرسال في ',
+                        style: readexPro(color: OnboardingColors.muted, fontSize: 16),
+                      ),
                       TextSpan(
                         text: '00:45',
-                        style: TextStyle(color: OnboardingColors.dark, fontWeight: FontWeight.w700),
+                        style: readexPro(
+                          color: OnboardingColors.dark,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ],
                   ),
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: OnboardingColors.muted, fontSize: 16),
                 ),
                 const SizedBox(height: 34),
                 OnboardingPrimaryButton(
@@ -68,11 +81,11 @@ class OnboardingOtpScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 40),
-                _OtpKeyboardPlaceholder(),
+                const _OtpKeyboardPlaceholder(),
               ],
             ),
           ),
-          const OnboardingHomeIndicator(),
+          
         ],
       ),
     );
@@ -101,7 +114,7 @@ class _OtpBoxes extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               index == 3 ? '|' : '',
-              style: const TextStyle(color: OnboardingColors.primaryBlue, fontSize: 28),
+              style: readexPro(color: OnboardingColors.primaryBlue, fontSize: 28),
             ),
           ),
         );
@@ -111,6 +124,8 @@ class _OtpBoxes extends StatelessWidget {
 }
 
 class _OtpKeyboardPlaceholder extends StatelessWidget {
+  const _OtpKeyboardPlaceholder();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -150,7 +165,10 @@ class _OtpKeyboardPlaceholder extends StatelessWidget {
           border: Border.all(color: const Color(0xFFCDD2DB)),
         ),
         alignment: Alignment.center,
-        child: Text(text, style: const TextStyle(fontSize: 28, color: Colors.black87)),
+        child: Text(
+          text,
+          style: readexPro(fontSize: 28, color: Colors.black87),
+        ),
       ),
     );
   }

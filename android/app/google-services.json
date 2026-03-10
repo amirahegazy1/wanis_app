@@ -12,7 +12,20 @@
           "package_name": "com.wanis.wanis_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "385448758934-kik1dehhjk26kdppkh4nlh07m1h6q261.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wanis.wanis_app",
+            "certificate_hash": "13d43e5201aad6756e1dae5e1e5399073391d10f"
+          }
+        },
+        {
+          "client_id": "385448758934-3702r1hn5usg2eur0537o7klaleto2d3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD6EusxHD5XB5BZzMgxTIz8TMmpRI4fLkI"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "385448758934-3702r1hn5usg2eur0537o7klaleto2d3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "385448758934-e2jmvuf7utogc84bjnmvsedl5omo5mh4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wanis.wanisApp"
+              }
+            }
+          ]
         }
       }
     }

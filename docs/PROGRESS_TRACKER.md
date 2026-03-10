@@ -12,6 +12,11 @@
 | 1     | Dependencies & Firebase    | Added core dependencies in `pubspec.yaml` (Firebase, auth providers, camera, AI, BLoC, audio). Firebase project `wanis-1` connected. `firebase_options.dart` and `firebase.json` generated. |
 | —     | App Rename & Branding      | App renamed to **Wanis** / **ونيس**. Logos updated in `assets/images/`. Launcher icons configured via `flutter_launcher_icons`.              |
 | —     | Android SDK Version Fix    | `minSdk` raised from 24 → **26** in `android/app/build.gradle.kts` to satisfy `google_mlkit_genai_prompt`.                                  |
+| 2     | Data Models & Base Services| Three OOP models (`ParentUser`, `ChildProfile`, `ContentItem`) in `lib/models/`. Two services (`AuthService`, `FirestoreService`) in `lib/services/`. Added `signInWithEmail`/`signUpWithEmail` to `AuthService`. |
+| 3     | Onboarding / Auth UI       | 10 screen files in `lib/features/onboarding/presentation/screens/` (Splash, Login, Sign Up, Forgot Password, OTP, New Password, Password Reset Success, Account Creation Success, Add Child, shared widgets). All use **Readex Pro** font via `google_fonts`. |
+| —     | Customise `main.dart`      | Replaced default counter template with `WanisApp`. Readex Pro set as app-wide default font. Starting screen: `OnboardingSplashScreen`.       |
+| —     | Declare Assets             | `assets/images/` declared in `pubspec.yaml`.                                                                                                 |
+| —     | Stub Screens               | Created placeholder `AppEntryScreen`, `ParentShellScreen`, and `parent_providers.dart` so onboarding navigation compiles.                     |
 
 ---
 
@@ -19,8 +24,7 @@
 
 | Phase | Description                               | Notes                                                                                                                                                                            |
 |-------|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 2     | Data Models & Base Services               | Three OOP models created (`ParentUser`, `ChildProfile`, `ContentItem`) in `lib/models/`. Two services created (`AuthService`, `FirestoreService`) in `lib/services/`.            |
-| 3     | Onboarding / Auth UI                      | Nine onboarding screens implemented in `lib/features/onboarding/presentation/screens/` (Login, Sign Up, Forgot Password, OTP, New Password, Success screens, Add Child, shared widgets). |
+| —     | Wire Firebase Initialisation              | Need to add `Firebase.initializeApp()` in `main.dart` using `DefaultFirebaseOptions`.                                                                                            |
 
 ---
 
@@ -28,9 +32,6 @@
 
 | Phase | Description                            | Notes                                                                                                  |
 |-------|----------------------------------------|--------------------------------------------------------------------------------------------------------|
-| —     | Customise `main.dart`                  | Replace the default Flutter counter template with Wanis app entry point, theme, and routing.            |
-| —     | Declare Assets in `pubspec.yaml`       | Add `assets:` section under `flutter:` to reference `assets/images/` and future model files.           |
-| —     | Wire Firebase Initialisation           | Add `Firebase.initializeApp()` in `main.dart` using `DefaultFirebaseOptions`.                          |
 | 4     | Core Layer & Theme Setup               | Implement shared utilities, app theme, routing, and dependency injection scaffold.                      |
 | 5     | Emotion Detection Module               | Integrate `.tflite` model, camera feed, and on-device inference pipeline.                               |
 | 6     | Emotion Router & Strategy Pattern      | Implement `EmotionRouter`, concrete strategies, and emotion-to-content mapping.                         |

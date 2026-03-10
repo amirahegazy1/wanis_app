@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Shared colour tokens used by onboarding screens translated from Figma.
 class OnboardingColors {
@@ -8,9 +9,29 @@ class OnboardingColors {
   static const dark = Color(0xFF2D3748);
   static const muted = Color(0xFFA0AEC0);
   static const border = Color(0xFFE2E8F0);
+  static const borderDark = Color(0xFFCBD5E0);
   static const primaryBlue = Color(0xFF5D9CEC);
   static const accentOrange = Color(0xFFF4A261);
   static const success = Color(0xFF48C774);
+  static const lightBlue = Color(0xFFEBF8FF);
+  static const splashBlue = Color(0xFF6BB5F8);
+}
+
+/// Readex Pro text style helper – ensures font family consistency everywhere.
+TextStyle readexPro({
+  double fontSize = 16,
+  FontWeight fontWeight = FontWeight.w400,
+  Color color = OnboardingColors.dark,
+  double? height,
+  TextDecoration? decoration,
+}) {
+  return GoogleFonts.readexPro(
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    color: color,
+    height: height,
+    decoration: decoration,
+  );
 }
 
 /// Outer frame used by onboarding screens to keep consistent width and spacing.
@@ -40,56 +61,6 @@ class OnboardingFrame extends StatelessWidget {
   }
 }
 
-/// Fake iOS style status row used in Figma onboarding mocks.
-class OnboardingStatusBar extends StatelessWidget {
-  const OnboardingStatusBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-      child: Row(
-        children: const [
-          Text(
-            '07 : 00',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          ),
-          Spacer(),
-          Icon(Icons.signal_cellular_alt_rounded, size: 15),
-          SizedBox(width: 4),
-          Icon(Icons.wifi_rounded, size: 15),
-          SizedBox(width: 4),
-          Icon(Icons.battery_full_rounded, size: 17),
-        ],
-      ),
-    );
-  }
-}
-
-/// Bottom home indicator bar shown on mockup screens.
-class OnboardingHomeIndicator extends StatelessWidget {
-  const OnboardingHomeIndicator({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        width: 140,
-        height: 5,
-        margin: const EdgeInsets.only(bottom: 8),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.45),
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
-  }
-}
 
 /// Reusable onboarding text input with rounded 16px border.
 ///
@@ -123,10 +94,10 @@ class OnboardingInput extends StatelessWidget {
         keyboardType: keyboardType,
         textAlign: TextAlign.right,
         textDirection: TextDirection.rtl,
-        style: const TextStyle(color: OnboardingColors.dark, fontSize: 16),
+        style: readexPro(color: OnboardingColors.dark, fontSize: 16),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(color: OnboardingColors.muted, fontSize: 16),
+          hintStyle: readexPro(color: OnboardingColors.muted, fontSize: 16),
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -164,12 +135,14 @@ class OnboardingPrimaryButton extends StatelessWidget {
     required this.onTap,
     this.color = OnboardingColors.primaryBlue,
     this.isLoading = false,
+    this.borderRadius = 56,
   });
 
   final String label;
   final VoidCallback onTap;
   final Color color;
   final bool isLoading;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +155,7 @@ class OnboardingPrimaryButton extends StatelessWidget {
           backgroundColor: color,
           disabledBackgroundColor: color.withValues(alpha: 0.5),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(56),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
         child: isLoading
@@ -196,12 +169,120 @@ class OnboardingPrimaryButton extends StatelessWidget {
               )
             : Text(
                 label,
-                style: const TextStyle(
+                style: readexPro(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                 ),
               ),
+      ),
+    );
+  }
+}
+
+/// Divider with "أو" in the middle – used in login/signup.
+class OnboardingDividerOr extends StatelessWidget {
+  const OnboardingDividerOr({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Expanded(child: Divider(color: OnboardingColors.border)),
+        const SizedBox(width: 14),
+        Text('أو', style: readexPro(color: OnboardingColors.muted, fontSize: 14)),
+        const SizedBox(width: 14),
+        const Expanded(child: Divider(color: OnboardingColors.border)),
+      ],
+    );
+  }
+}
+
+/// Social login button matching Figma style (full-width, outlined).
+class OnboardingSocialButton extends StatelessWidget {
+  const OnboardingSocialButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    this.onTap,
+  });
+
+  final Widget icon;
+  final String label;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 56,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: OnboardingColors.border),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon,
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: readexPro(
+                color: OnboardingColors.dark,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Reusable form field label.
+class OnboardingLabel extends StatelessWidget {
+  const OnboardingLabel(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.right,
+      style: readexPro(
+        color: OnboardingColors.dark,
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+      ),
+    );
+  }
+}
+
+/// Success circle with check icon – used in success screens.
+class OnboardingSuccessCircle extends StatelessWidget {
+  const OnboardingSuccessCircle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 160,
+      height: 160,
+      decoration: const BoxDecoration(
+        color: Color(0x1A48C774),
+        shape: BoxShape.circle,
+      ),
+      alignment: Alignment.center,
+      child: Container(
+        width: 120,
+        height: 120,
+        decoration: const BoxDecoration(
+          color: OnboardingColors.success,
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(Icons.check_rounded, color: Colors.white, size: 62),
       ),
     );
   }

@@ -12,46 +12,50 @@ class OnboardingNewPasswordScreen extends StatelessWidget {
     return OnboardingFrame(
       child: Stack(
         children: [
-          const Positioned(top: 0, left: 0, right: 0, child: OnboardingStatusBar()),
+          
           SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 86, 24, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // Back button
                 Align(
                   alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_rounded),
-                    onPressed: () => Navigator.pop(context),
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.arrow_back_rounded, size: 20),
                   ),
                 ),
                 const SizedBox(height: 22),
-                const Text(
+                // Title – Figma: 28px Bold
+                Text(
                   'كلمة مرور جديدة 🔒',
                   textAlign: TextAlign.right,
-                  style: TextStyle(
+                  style: readexPro(
                     color: OnboardingColors.dark,
-                    fontSize: 44,
+                    fontSize: 28,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'يجب أن تكون الكلمة الجديدة مختلفة عن السابقة',
                   textAlign: TextAlign.right,
-                  style: TextStyle(color: OnboardingColors.muted, fontSize: 16),
+                  style: readexPro(color: OnboardingColors.muted, fontSize: 16),
                 ),
                 const SizedBox(height: 26),
-                const _Label('كلمة المرور الجديدة'),
+                const OnboardingLabel('كلمة المرور الجديدة'),
                 const SizedBox(height: 12),
-                const OnboardingInput(
+                OnboardingInput(
                   hint: '•••••••••',
-                  prefix: Icon(Icons.visibility_off_outlined, color: OnboardingColors.muted),
+                  obscureText: true,
+                  prefix: const Icon(Icons.visibility_off_outlined,
+                      color: OnboardingColors.muted, size: 22),
                 ),
                 const SizedBox(height: 24),
-                const _Label('تأكيد كلمة المرور'),
+                const OnboardingLabel('تأكيد كلمة المرور'),
                 const SizedBox(height: 12),
-                const OnboardingInput(hint: '•••••••••'),
+                const OnboardingInput(hint: '•••••••••', obscureText: true),
                 const SizedBox(height: 14),
                 const _Rule(ok: true, text: '8 حروف على الأقل'),
                 const SizedBox(height: 8),
@@ -72,25 +76,8 @@ class OnboardingNewPasswordScreen extends StatelessWidget {
               ],
             ),
           ),
-          const OnboardingHomeIndicator(),
+          
         ],
-      ),
-    );
-  }
-}
-
-class _Label extends StatelessWidget {
-  const _Label(this.text);
-  final String text;
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      textAlign: TextAlign.right,
-      style: const TextStyle(
-        color: OnboardingColors.dark,
-        fontSize: 14,
-        fontWeight: FontWeight.w700,
       ),
     );
   }
@@ -107,16 +94,19 @@ class _Rule extends StatelessWidget {
       children: [
         Text(
           text,
-          style: TextStyle(
+          style: readexPro(
             color: ok ? OnboardingColors.dark : OnboardingColors.muted,
             fontSize: 14,
           ),
         ),
         const SizedBox(width: 8),
-        Icon(
-          Icons.circle,
-          size: 16,
-          color: ok ? const Color(0xFF85E4A9) : const Color(0xFFD5DCE5),
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: ok ? const Color(0xFF85E4A9) : const Color(0xFFD5DCE5),
+          ),
         ),
       ],
     );

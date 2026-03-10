@@ -12,29 +12,34 @@ class OnboardingAccountSuccessScreen extends StatelessWidget {
     return OnboardingFrame(
       child: Stack(
         children: [
-          const Positioned(top: 0, left: 0, right: 0, child: OnboardingStatusBar()),
+          
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _SuccessCircle(icon: Icons.check_rounded),
+                  const OnboardingSuccessCircle(),
                   const SizedBox(height: 24),
-                  const Text(
+                  // Title – Figma: 32px Bold
+                  Text(
                     'تم بنجاح! 🎉',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: readexPro(
                       color: OnboardingColors.dark,
-                      fontSize: 36,
+                      fontSize: 32,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 14),
-                  const Text(
+                  const SizedBox(height: 16),
+                  Text(
                     'تم إنشاء حسابك بنجاح، أنت الآن\nجاهز لبدء الرحلة مع ونيس.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: OnboardingColors.muted, fontSize: 16, height: 1.6),
+                    style: readexPro(
+                      color: OnboardingColors.muted,
+                      fontSize: 16,
+                      height: 1.6,
+                    ),
                   ),
                 ],
               ),
@@ -56,33 +61,8 @@ class OnboardingAccountSuccessScreen extends StatelessWidget {
               },
             ),
           ),
-          const OnboardingHomeIndicator(),
+          
         ],
-      ),
-    );
-  }
-}
-
-class _SuccessCircle extends StatelessWidget {
-  const _SuccessCircle({required this.icon});
-
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 160,
-      height: 160,
-      decoration: BoxDecoration(
-        color: const Color(0x1448C774),
-        shape: BoxShape.circle,
-      ),
-      alignment: Alignment.center,
-      child: Container(
-        width: 120,
-        height: 120,
-        decoration: const BoxDecoration(color: OnboardingColors.success, shape: BoxShape.circle),
-        child: Icon(icon, color: Colors.white, size: 62),
       ),
     );
   }

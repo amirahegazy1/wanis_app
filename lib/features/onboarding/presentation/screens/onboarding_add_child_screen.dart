@@ -19,21 +19,23 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
     return OnboardingFrame(
       child: Stack(
         children: [
-          const Positioned(top: 0, left: 0, right: 0, child: OnboardingStatusBar()),
+          
           SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 62, 24, 24),
             child: Column(
               children: [
+                // Header – Figma: small icons + "ونيس" 20px Bold
                 const Icon(Icons.bubble_chart_rounded, color: OnboardingColors.primaryBlue, size: 30),
-                const Text(
+                Text(
                   'ونيس',
-                  style: TextStyle(
+                  style: readexPro(
                     color: OnboardingColors.primaryBlue,
-                    fontSize: 34,
+                    fontSize: 20,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 20),
+                // Hero illustration placeholder
                 Container(
                   width: 160,
                   height: 160,
@@ -46,27 +48,29 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
                   child: const Text('🙂', style: TextStyle(fontSize: 74)),
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                // Welcome text – Figma: 28px Bold
+                Text(
                   'مرحباً بك في ونيس',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: readexPro(
                     color: OnboardingColors.dark,
-                    fontSize: 44,
+                    fontSize: 28,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
+                Text(
                   'رفيق طفلك لتعلم المشاعر وتطوير المهارات',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: OnboardingColors.muted, fontSize: 16),
+                  style: readexPro(color: OnboardingColors.muted, fontSize: 16),
                 ),
                 const SizedBox(height: 28),
-                const Align(
+                // "من هو بطلنا اليوم؟" – Figma: 16px Bold
+                Align(
                   alignment: Alignment.centerRight,
                   child: Text(
                     'من هو بطلنا اليوم؟',
-                    style: TextStyle(
+                    style: readexPro(
                       color: OnboardingColors.dark,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -76,11 +80,12 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
                 const SizedBox(height: 12),
                 const OnboardingInput(hint: 'اكتب اسم الطفل هنا...'),
                 const SizedBox(height: 24),
-                const Align(
+                // "اختر شخصية:" – Figma: 16px Bold
+                Align(
                   alignment: Alignment.centerRight,
                   child: Text(
                     'اختر شخصية:',
-                    style: TextStyle(
+                    style: readexPro(
                       color: OnboardingColors.dark,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -129,7 +134,7 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
               ],
             ),
           ),
-          const OnboardingHomeIndicator(),
+          
         ],
       ),
     );

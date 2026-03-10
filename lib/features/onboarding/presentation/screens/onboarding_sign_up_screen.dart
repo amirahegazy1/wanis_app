@@ -1,32 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../services/auth_service.dart';
 import '../../../auth/presentation/screens/auth_entry_screen.dart';
-import '../../../parent/presentation/providers/parent_providers.dart';
 import 'onboarding_login_screen.dart';
 import 'onboarding_shared.dart';
 
-/// Figma-faithful sign-up screen (node `8:105`) wired to Firebase auth.
-///
-/// After successful account creation the entire stack is replaced with
-/// [AppEntryScreen] which bootstraps the parent profile.
-class OnboardingSignUpScreen extends ConsumerStatefulWidget {
+/// Sign-up screen (Figma node `8:105`) wired to Firebase Auth.
+class OnboardingSignUpScreen extends StatefulWidget {
   const OnboardingSignUpScreen({super.key});
 
   @override
-  ConsumerState<OnboardingSignUpScreen> createState() =>
-      _OnboardingSignUpScreenState();
+  State<OnboardingSignUpScreen> createState() => _OnboardingSignUpScreenState();
 }
 
-class _OnboardingSignUpScreenState
-    extends ConsumerState<OnboardingSignUpScreen> {
+class _OnboardingSignUpScreenState extends State<OnboardingSignUpScreen> {
+  final _authService = AuthService();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
-  bool _agreedToTerms = false;
   bool _obscurePassword = true;
+  bool _agreedToTerms = false;
   String? _errorMessage;
 
   @override
@@ -37,11 +33,12 @@ class _OnboardingSignUpScreenState
     super.dispose();
   }
 
+  // ── Auth actions ────────────────────────────────────────────────
+
   Future<void> _signUp() async {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
       setState(() => _errorMessage = 'يرجى ملء جميع الحقول');
       return;
@@ -50,23 +47,22 @@ class _OnboardingSignUpScreenState
       setState(() => _errorMessage = 'يرجى الموافقة على الشروط والأحكام');
       return;
     }
-
-    await _runAuth(() => ref.read(authServiceProvider).signUpWithEmail(
+    await _runAuth(() => _authService.signUpWithEmail(
           email: email,
           password: password,
-          name: name,
+          displayName: name,
         ));
   }
 
   Future<void> _signUpWithGoogle() async {
-    await _runAuth(() => ref.read(authServiceProvider).signInWithGoogle());
+    await _runAuth(() => _authService.signInWithGoogle());
   }
 
   Future<void> _signUpWithApple() async {
-    await _runAuth(() => ref.read(authServiceProvider).signInWithApple());
+    await _runAuth(() => _authService.signInWithApple());
   }
 
-  Future<void> _runAuth(Future<void> Function() action) async {
+  Future<void> _runAuth(Future<dynamic> Function() action) async {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -79,11 +75,29 @@ class _OnboardingSignUpScreenState
         MaterialPageRoute(builder: (_) => const AppEntryScreen()),
         (_) => false,
       );
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      setState(() => _errorMessage = _mapFirebaseError(e.code));
     } catch (e) {
       if (!mounted) return;
-      setState(() => _errorMessage = e.toString());
+      setState(() => _errorMessage = 'حدث خطأ غير متوقع. يرجى المحاولة لاحقاً');
     } finally {
       if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  String _mapFirebaseError(String code) {
+    switch (code) {
+      case 'email-already-in-use':
+        return 'هذا البريد الإلكتروني مستخدم بالفعل';
+      case 'weak-password':
+        return 'كلمة المرور ضعيفة. يرجى استخدام 6 أحرف على الأقل';
+      case 'invalid-email':
+        return 'البريد الإلكتروني غير صالح';
+      case 'operation-not-allowed':
+        return 'هذا النوع من التسجيل غير مفعّل حالياً';
+      default:
+        return 'حدث خطأ ($code). يرجى المحاولة لاحقاً';
     }
   }
 
@@ -93,238 +107,209 @@ class _OnboardingSignUpScreenState
         defaultTargetPlatform == TargetPlatform.macOS;
   }
 
+  // ── UI ──────────────────────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
     return OnboardingFrame(
-      child: Stack(
-        children: [
-          const Positioned(
-              top: 0, left: 0, right: 0, child: OnboardingStatusBar()),
-          SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 86, 24, 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.arrow_back_rounded,
-                          color: OnboardingColors.dark),
-                    ),
-                    const Spacer(),
-                    const Text(
-                      'حساب جديد 🚀',
-                      style: TextStyle(
-                        color: OnboardingColors.dark,
-                        fontSize: 36,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'انضم لعائلة ونيس وابدأ الرحلة',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(color: OnboardingColors.muted, fontSize: 16),
-                ),
-                const SizedBox(height: 26),
-                const _Label('الاسم الكامل'),
-                const SizedBox(height: 12),
-                OnboardingInput(
-                  hint: 'اكتب اسمك هنا...',
-                  controller: _nameController,
-                ),
-                const SizedBox(height: 18),
-                const _Label('البريد الإلكتروني'),
-                const SizedBox(height: 12),
-                OnboardingInput(
-                  hint: 'example@mail.com',
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 18),
-                const _Label('كلمة المرور'),
-                const SizedBox(height: 12),
-                OnboardingInput(
-                  hint: '••••••••',
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  prefix: GestureDetector(
-                    onTap: () =>
-                        setState(() => _obscurePassword = !_obscurePassword),
-                    child: Text(
-                      _obscurePassword ? 'Show' : 'Hide',
-                      style: const TextStyle(
-                        color: OnboardingColors.primaryBlue,
-                        fontSize: 12,
-                      ),
-                    ),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Back + Title row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.arrow_back_rounded, size: 20),
                   ),
-                ),
-                const SizedBox(height: 18),
-                GestureDetector(
-                  onTap: () =>
-                      setState(() => _agreedToTerms = !_agreedToTerms),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text.rich(
-                          const TextSpan(
-                            children: [
-                              TextSpan(text: 'أوافق على '),
-                              TextSpan(
-                                text: 'الشروط والأحكام',
-                                style: TextStyle(
-                                  color: OnboardingColors.primaryBlue,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                              color: OnboardingColors.dark, fontSize: 14),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Icon(
-                        _agreedToTerms
-                            ? Icons.check_box_rounded
-                            : Icons.check_box_outline_blank_rounded,
-                        color: OnboardingColors.primaryBlue,
-                      ),
-                    ],
-                  ),
-                ),
-                if (_errorMessage != null) ...[
-                  const SizedBox(height: 12),
                   Text(
-                    _errorMessage!,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.red.shade700, fontSize: 14),
+                    'حساب جديد 🚀',
+                    style: readexPro(
+                      color: OnboardingColors.dark,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ],
-                const SizedBox(height: 18),
-                OnboardingPrimaryButton(
-                  label: 'إنشاء الحساب',
-                  color: OnboardingColors.accentOrange,
-                  isLoading: _isLoading,
-                  onTap: _signUp,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'انضم لعائلة ونيس وابدأ الرحلة',
+                textAlign: TextAlign.right,
+                style: readexPro(color: OnboardingColors.muted, fontSize: 16),
+              ),
+              const SizedBox(height: 28),
+              const OnboardingLabel('الاسم الكامل'),
+              const SizedBox(height: 12),
+              OnboardingInput(hint: 'اكتب اسمك هنا...', controller: _nameController),
+              const SizedBox(height: 18),
+              const OnboardingLabel('البريد الإلكتروني'),
+              const SizedBox(height: 12),
+              OnboardingInput(
+                hint: 'example@mail.com',
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 18),
+              const OnboardingLabel('كلمة المرور'),
+              const SizedBox(height: 12),
+              OnboardingInput(
+                hint: '••••••••',
+                controller: _passwordController,
+                obscureText: _obscurePassword,
+                prefix: GestureDetector(
+                  onTap: () => setState(() => _obscurePassword = !_obscurePassword),
+                  child: Icon(
+                    _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                    color: OnboardingColors.muted,
+                    size: 22,
+                  ),
                 ),
-                const SizedBox(height: 30),
-                const _DividerWithOr(),
-                const SizedBox(height: 16),
-                Row(
+              ),
+              const SizedBox(height: 18),
+              // Terms checkbox
+              GestureDetector(
+                onTap: () => setState(() => _agreedToTerms = !_agreedToTerms),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (_supportsAppleSignIn)
-                      Expanded(
-                        child: _SquareSocial(
-                          icon: '',
-                          onTap: _isLoading ? null : _signUpWithApple,
-                        ),
-                      ),
-                    if (_supportsAppleSignIn) const SizedBox(width: 15),
-                    Expanded(
-                      child: _SquareSocial(
-                        icon: 'G',
-                        onTap: _isLoading ? null : _signUpWithGoogle,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 18),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const OnboardingLoginScreen()),
-                      );
-                    },
-                    child: RichText(
-                      text: const TextSpan(
-                        style: TextStyle(
-                            color: OnboardingColors.dark, fontSize: 14),
+                    Text.rich(
+                      TextSpan(
                         children: [
-                          TextSpan(text: 'لديك حساب بالفعل؟ '),
                           TextSpan(
-                            text: 'تسجيل الدخول',
-                            style: TextStyle(
+                            text: 'أوافق على ',
+                            style: readexPro(color: OnboardingColors.dark, fontSize: 14),
+                          ),
+                          TextSpan(
+                            text: 'الشروط والأحكام',
+                            style: readexPro(
                               color: OnboardingColors.primaryBlue,
+                              fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
+                    const SizedBox(width: 8),
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: _agreedToTerms
+                              ? OnboardingColors.primaryBlue
+                              : OnboardingColors.border,
+                          width: 2,
+                        ),
+                        color: _agreedToTerms ? OnboardingColors.primaryBlue : Colors.white,
+                      ),
+                      child: _agreedToTerms
+                          ? const Icon(Icons.check, size: 16, color: Colors.white)
+                          : null,
+                    ),
+                  ],
+                ),
+              ),
+              if (_errorMessage != null) ...[
+                const SizedBox(height: 12),
+                Text(
+                  _errorMessage!,
+                  textAlign: TextAlign.center,
+                  style: readexPro(color: Colors.red.shade700, fontSize: 14),
                 ),
               ],
-            ),
+              const SizedBox(height: 24),
+              OnboardingPrimaryButton(
+                label: 'إنشاء الحساب',
+                color: OnboardingColors.accentOrange,
+                borderRadius: 16,
+                isLoading: _isLoading,
+                onTap: _signUp,
+              ),
+              const SizedBox(height: 24),
+              const OnboardingDividerOr(),
+              const SizedBox(height: 18),
+              // Social buttons – side by side (Figma layout)
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: _isLoading ? null : _signUpWithGoogle,
+                      child: Container(
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: OnboardingColors.border),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text('G',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF4285F4),
+                            )),
+                      ),
+                    ),
+                  ),
+                  if (_supportsAppleSignIn) ...[
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: _isLoading ? null : _signUpWithApple,
+                        child: Container(
+                          height: 56,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: OnboardingColors.border),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Icon(Icons.apple, size: 28, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 18),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const OnboardingLoginScreen()),
+                    );
+                  },
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'لديك حساب بالفعل؟ ',
+                          style: readexPro(color: OnboardingColors.dark, fontSize: 14),
+                        ),
+                        TextSpan(
+                          text: 'تسجيل الدخول',
+                          style: readexPro(
+                            color: OnboardingColors.primaryBlue,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          const OnboardingHomeIndicator(),
-        ],
-      ),
-    );
-  }
-}
-
-class _Label extends StatelessWidget {
-  const _Label(this.text);
-  final String text;
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      textAlign: TextAlign.right,
-      style: const TextStyle(
-        color: OnboardingColors.dark,
-        fontSize: 14,
-        fontWeight: FontWeight.w700,
-      ),
-    );
-  }
-}
-
-class _DividerWithOr extends StatelessWidget {
-  const _DividerWithOr();
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
-      children: [
-        Expanded(child: Divider(color: OnboardingColors.border)),
-        SizedBox(width: 14),
-        Text('أو', style: TextStyle(color: OnboardingColors.muted)),
-        SizedBox(width: 14),
-        Expanded(child: Divider(color: OnboardingColors.border)),
-      ],
-    );
-  }
-}
-
-class _SquareSocial extends StatelessWidget {
-  const _SquareSocial({required this.icon, this.onTap});
-  final String icon;
-  final VoidCallback? onTap;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 56,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: OnboardingColors.border),
         ),
-        alignment: Alignment.center,
-        child: Text(icon,
-            style: const TextStyle(
-                fontSize: 28, color: OnboardingColors.dark)),
       ),
     );
   }
