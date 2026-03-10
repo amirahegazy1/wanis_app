@@ -24,6 +24,7 @@
 | 3.2   | Games Screens Implementation| - Extract Figma designs for 11 screens (reduced to 4 implemented logic games per plan).<br>- Implement GamesMenuScreen and navigation from Home.<br>- Implement Game Screens (Sorting, Matching, Memory, Emotion Camera).<br>- Implement Win/Retry dialogs. |
 | 3.3   | Relaxation Corner Screens   | - Added Figma designs for `RelaxationCornerScreen` and nested activities.<br>- Implemented `BreathingExerciseScreen`, `FidgetGamingScreen`, `NaturalSoundsScreen`, and success dialog.<br>- Routed from Home screen. |
 | 3.4   | Coloring Screens Implementation| - Extracted Figma designs for Coloring Menu, Canvas, and Success dialog.<br>- Built the navigation flow starting from the Home screen ("تلوين" button).<br>- Used existing Readex Pro app theme for typography. |
+| 3.5   | Daily Emotion Tracking Screens | - Extracted Figma designs for Emotion tracking screens (Node 285:378).<br>- Implemented `DailyEmotionTrackingScreen` and `DailyEmotionSuccessDialog`.<br>- Built navigation flow from Home screen ("مشاعر" button).<br>- Used Readex Pro app theme for typography. |
 ---
 
 ## In Progress
