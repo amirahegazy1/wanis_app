@@ -22,6 +22,7 @@
 | —     | Post-Login Nav & Google Fix| `AppEntryScreen` now routes to `HomeScreen`. Google/Apple Sign-In no longer navigates on cancellation (`null` result check). |
 | —     | Flow & Navigation Fixes    | Fixed Sign Up flow to route through Add Child → Account Success → Home. Wired Home screen hero card to `StoriesListScreen`.|
 | 3.2   | Games Screens Implementation| - Extract Figma designs for 11 screens (reduced to 4 implemented logic games per plan).<br>- Implement GamesMenuScreen and navigation from Home.<br>- Implement Game Screens (Sorting, Matching, Memory, Emotion Camera).<br>- Implement Win/Retry dialogs. |
+| 3.3   | Relaxation Corner Screens   | - Added Figma designs for `RelaxationCornerScreen` and nested activities.<br>- Implemented `BreathingExerciseScreen`, `FidgetGamingScreen`, `NaturalSoundsScreen`, and success dialog.<br>- Routed from Home screen. |
 
 ---
 

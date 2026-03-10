@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../games/presentation/screens/games_menu_screen.dart';
+import '../../../relaxation/presentation/screens/relaxation_corner_screen.dart';
 import '../../../stories/presentation/screens/stories_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -251,6 +252,14 @@ class HomeScreen extends StatelessWidget {
             title: 'هدوء',
             emoji: '🍃',
             bgColor: const Color(0xFFE6FFFA),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RelaxationCornerScreen(),
+                ),
+              );
+            },
           ),
           _buildActivityCard(
             context,
