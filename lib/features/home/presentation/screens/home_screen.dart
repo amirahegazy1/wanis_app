@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../games/presentation/screens/games_menu_screen.dart';
 import '../../../stories/presentation/screens/stories_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -21,7 +22,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 32),
               _buildActivityLibraryTitle(),
               const SizedBox(height: 16),
-              _buildGridSection(),
+              _buildGridSection(context),
               const SizedBox(height: 40),
             ],
           ),
@@ -221,7 +222,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildGridSection() {
+  Widget _buildGridSection(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 26),
       child: GridView.count(
@@ -232,21 +233,33 @@ class HomeScreen extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           _buildActivityCard(
+            context,
             title: 'ألعاب',
             emoji: '🧩',
             bgColor: const Color(0xFFFFF5EB),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const GamesMenuScreen(),
+                ),
+              );
+            },
           ),
           _buildActivityCard(
+            context,
             title: 'هدوء',
             emoji: '🍃',
             bgColor: const Color(0xFFE6FFFA),
           ),
           _buildActivityCard(
+            context,
             title: 'تلوين',
             emoji: '🎨',
             bgColor: const Color(0xFFEBF8FF),
           ),
           _buildActivityCard(
+            context,
             title: 'مشاعر',
             emoji: '😊',
             bgColor: const Color(0xFFFDF2F8),
@@ -256,44 +269,49 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActivityCard({
+  Widget _buildActivityCard(
+    BuildContext context, {
     required String title,
     required String emoji,
     required Color bgColor,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 70,
-            height: 70,
-            decoration: BoxDecoration(
-              color: bgColor,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                emoji,
-                style: const TextStyle(fontSize: 32),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: const Color(0xFFE2E8F0)),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                color: bgColor,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  emoji,
+                  style: const TextStyle(fontSize: 32),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3748),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF2D3748),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

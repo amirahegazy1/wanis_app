@@ -21,13 +21,13 @@
 | 3.1   | Home & Stories UI          | Implemented 14 Figma screens/components (`home_screen`, `stories_list`, player, interactive question, and `AnswerFeedbackDialog` overlay).|
 | —     | Post-Login Nav & Google Fix| `AppEntryScreen` now routes to `HomeScreen`. Google/Apple Sign-In no longer navigates on cancellation (`null` result check). |
 | —     | Flow & Navigation Fixes    | Fixed Sign Up flow to route through Add Child → Account Success → Home. Wired Home screen hero card to `StoriesListScreen`.|
+| 3.2   | Games Screens Implementation| - Extract Figma designs for 11 screens (reduced to 4 implemented logic games per plan).<br>- Implement GamesMenuScreen and navigation from Home.<br>- Implement Game Screens (Sorting, Matching, Memory, Emotion Camera).<br>- Implement Win/Retry dialogs. |
 
 ---
 
 ## In Progress
+(None currently)
 
-| Phase | Description                               | Notes                                                                                                                                                                            |
-|-------|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 ---
 
 ## To-Do
