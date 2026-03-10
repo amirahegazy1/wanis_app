@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../stories/presentation/screens/stories_list_screen.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -15,7 +17,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               _buildHeader(),
               const SizedBox(height: 24),
-              _buildHeroCard(),
+              _buildHeroCard(context),
               const SizedBox(height: 32),
               _buildActivityLibraryTitle(),
               const SizedBox(height: 16),
@@ -107,8 +109,15 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroCard() {
-    return Padding(
+  Widget _buildHeroCard(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const StoriesListScreen()),
+        );
+      },
+      child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 26),
       child: Container(
         height: 240,
@@ -192,6 +201,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

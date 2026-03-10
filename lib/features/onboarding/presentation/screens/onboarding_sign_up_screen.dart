@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../services/auth_service.dart';
-import '../../../auth/presentation/screens/auth_entry_screen.dart';
+import 'onboarding_add_child_screen.dart';
 import 'onboarding_login_screen.dart';
 import 'onboarding_shared.dart';
 
@@ -78,7 +78,7 @@ class _OnboardingSignUpScreenState extends State<OnboardingSignUpScreen> {
       if (!mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => const AppEntryScreen()),
+        MaterialPageRoute(builder: (_) => const OnboardingAddChildScreen()),
         (_) => false,
       );
     } on FirebaseAuthException catch (e) {

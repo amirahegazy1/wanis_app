@@ -19,7 +19,8 @@
 | —     | Stub Screens               | Created placeholder `AppEntryScreen`, `ParentShellScreen`, and `parent_providers.dart` so onboarding navigation compiles.                     |
 | —     | Wire Firebase Initialisation| Added `Firebase.initializeApp()` in `main.dart` using `DefaultFirebaseOptions`.                                                            |
 | 3.1   | Home & Stories UI          | Implemented 14 Figma screens/components (`home_screen`, `stories_list`, player, interactive question, and `AnswerFeedbackDialog` overlay).|
-| —     | Post-Login Nav & Google Fix| `AppEntryScreen` now routes to `HomeScreen`. Google/Apple Sign-In no longer navigates on cancellation (`null` result check). `onboarding_add_child_screen` updated to use `AppEntryScreen`.|
+| —     | Post-Login Nav & Google Fix| `AppEntryScreen` now routes to `HomeScreen`. Google/Apple Sign-In no longer navigates on cancellation (`null` result check). |
+| —     | Flow & Navigation Fixes    | Fixed Sign Up flow to route through Add Child → Account Success → Home. Wired Home screen hero card to `StoriesListScreen`.|
 
 ---
 
