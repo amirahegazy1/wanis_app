@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../games/presentation/screens/games_menu_screen.dart';
 import '../../../relaxation/presentation/screens/relaxation_corner_screen.dart';
 import '../../../stories/presentation/screens/stories_list_screen.dart';
+import '../../../coloring/presentation/screens/coloring_menu_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -266,6 +267,14 @@ class HomeScreen extends StatelessWidget {
             title: 'تلوين',
             emoji: '🎨',
             bgColor: const Color(0xFFEBF8FF),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ColoringMenuScreen(),
+                ),
+              );
+            },
           ),
           _buildActivityCard(
             context,
