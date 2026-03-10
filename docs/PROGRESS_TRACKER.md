@@ -26,6 +26,7 @@
 | 3.4   | Coloring Screens Implementation| - Extracted Figma designs for Coloring Menu, Canvas, and Success dialog.<br>- Built the navigation flow starting from the Home screen ("تلوين" button).<br>- Used existing Readex Pro app theme for typography. |
 | 3.5   | Daily Emotion Tracking Screens | - Extracted Figma designs for Emotion tracking screens (Node 285:378).<br>- Implemented `DailyEmotionTrackingScreen` and `DailyEmotionSuccessDialog`.<br>- Built navigation flow from Home screen ("مشاعر" button).<br>- Used Readex Pro app theme for typography. |
 | 3.6   | Achievements Screen Implementation | - Extracted Figma designs for Achievements Screen (Node 285:379).<br>- Implemented `AchievementsScreen` with total stars and badges (Story Hero, Creative Artist, King of Calmness, Explorer).<br>- Connected "إنجازاتي" button in Home Screen bottom navigation.<br>- Kept Readex Pro app theme for typography. |
+| 3.7   | Profile & Parent Dashboard     | - Extracted Figma designs for Profile Screens (285:380) and Dashboard (285:381).<br>- Implementing Profile screen, Edit Profile screen, Parent Gate dialog, and Parent Dashboard.<br>- Connecting Profile to Home screen bottom navigation.<br>- Kept Readex Pro app theme for typography. |
 ---
 
 ## In Progress

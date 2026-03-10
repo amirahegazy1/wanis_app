@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'dart:ui';
 
-import '../../../home/presentation/screens/home_screen.dart';
+import '../../../home/presentation/screens/main_navigation_screen.dart';
 import '../screens/coloring_menu_screen.dart';
 
 class ColoringSuccessDialog extends StatelessWidget {
@@ -116,7 +116,7 @@ class ColoringSuccessDialog extends StatelessWidget {
         onPressed: () {
           // Go back to home
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const HomeScreen()),
+            MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
             (route) => false,
           );
         },
