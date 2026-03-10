@@ -27,6 +27,7 @@
 | 3.5   | Daily Emotion Tracking Screens | - Extracted Figma designs for Emotion tracking screens (Node 285:378).<br>- Implemented `DailyEmotionTrackingScreen` and `DailyEmotionSuccessDialog`.<br>- Built navigation flow from Home screen ("مشاعر" button).<br>- Used Readex Pro app theme for typography. |
 | 3.6   | Achievements Screen Implementation | - Extracted Figma designs for Achievements Screen (Node 285:379).<br>- Implemented `AchievementsScreen` with total stars and badges (Story Hero, Creative Artist, King of Calmness, Explorer).<br>- Connected "إنجازاتي" button in Home Screen bottom navigation.<br>- Kept Readex Pro app theme for typography. |
 | 3.7   | Profile & Parent Dashboard     | - Extracted Figma designs for Profile Screens (285:380) and Dashboard (285:381).<br>- Implementing Profile screen, Edit Profile screen, Parent Gate dialog, and Parent Dashboard.<br>- Connecting Profile to Home screen bottom navigation.<br>- Kept Readex Pro app theme for typography. |
+| 5     | Emotion Detection Module         | - Integrated TFLite model (`assets/ai/model.tflite`) using `tflite_flutter ^0.12.1`.<br>- Built `EmotionService` with ML Kit face detection, YUV/BGRA image conversion, 48×48 grayscale preprocessing, inference, and softmax.<br>- Rewrote `EmotionRecognitionCameraScreen` with live front-camera stream and real-time emotion display.<br>- Created `TherapeuticStoryService` with abstract `StoryGenerator` interface (ready for future Google AI swap) and predefined Arabic stories for all 8 emotions.<br>- Updated `WanisStoryWritingScreen` with animated story display, moral lesson card, and re-generation button.<br>- Configured `aaptOptions { noCompress "tflite" }` in Android `build.gradle.kts`. |
 ---
 
 ## In Progress
@@ -39,7 +40,6 @@
 | Phase | Description                            | Notes                                                                                                  |
 |-------|----------------------------------------|--------------------------------------------------------------------------------------------------------|
 | 4     | Core Layer & Theme Setup               | Implement shared utilities, app theme, routing, and dependency injection scaffold.                      |
-| 5     | Emotion Detection Module               | Integrate `.tflite` model, camera feed, and on-device inference pipeline.                               |
 | 6     | Emotion Router & Strategy Pattern      | Implement `EmotionRouter`, concrete strategies, and emotion-to-content mapping.                         |
 | 7     | Child Interface                        | Build calming exercises, interactive stories, and soothing music screens.                               |
 | 8     | Emotion Reports & Analytics            | Parent dashboard charts, session history, and trend visualisation.                                      |
