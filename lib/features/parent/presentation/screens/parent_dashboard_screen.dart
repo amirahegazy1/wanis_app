@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../onboarding/presentation/screens/onboarding_splash_screen.dart';
+import '../../../../services/auth_service.dart';
+
 class ParentDashboardScreen extends StatefulWidget {
   const ParentDashboardScreen({super.key});
 
@@ -46,6 +49,27 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
                       child: IconButton(
                         icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFFA0AEC0), size: 18),
                         onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      width: 48,
+                      height: 48,
+                      margin: const EdgeInsets.only(right: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x0C000000),
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                          )
+                        ],
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.logout, color: Colors.redAccent, size: 22),
+                        onPressed: () => _showLogoutDialog(context),
                       ),
                     ),
                     Column(
@@ -250,6 +274,66 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext contextDialog) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text(
+            'تسجيل الخروج',
+            textAlign: TextAlign.right,
+            style: GoogleFonts.readexPro(
+              color: const Color(0xFF2D3748),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            'هل أنت متأكد من رغبتك في تسجيل الخروج؟',
+            textAlign: TextAlign.right,
+            style: GoogleFonts.readexPro(
+              color: const Color(0xFFA0AEC0),
+            ),
+          ),
+          actionsAlignment: MainAxisAlignment.spaceBetween,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(contextDialog).pop(),
+              child: Text(
+                'إلغاء',
+                style: GoogleFonts.readexPro(color: const Color(0xFFA0AEC0)),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () async {
+                final navigator = Navigator.of(context);
+                Navigator.of(contextDialog).pop(); // Close dialog
+                final authService = AuthService();
+                await authService.signOut();
+                navigator.pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (_) => const OnboardingSplashScreen(),
+                  ),
+                  (route) => false,
+                );
+              },
+              child: Text(
+                'تأكيد',
+                style: GoogleFonts.readexPro(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

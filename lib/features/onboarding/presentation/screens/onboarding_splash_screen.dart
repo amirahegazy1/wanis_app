@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../auth/presentation/screens/auth_entry_screen.dart';
 import 'onboarding_login_screen.dart';
 import 'onboarding_shared.dart';
 
@@ -33,11 +35,17 @@ class _OnboardingSplashScreenState extends State<OnboardingSplashScreen>
 
     Timer(const Duration(milliseconds: 2500), () {
       if (!mounted) return;
+      
+      final currentUser = FirebaseAuth.instance.currentUser;
+      final Widget nextScreen = currentUser != null 
+          ? const AppEntryScreen() 
+          : const OnboardingLoginScreen();
+
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 500),
-          pageBuilder: (_, __, ___) => const OnboardingLoginScreen(),
+          pageBuilder: (_, __, ___) => nextScreen,
           transitionsBuilder: (_, anim, __, child) =>
               FadeTransition(opacity: anim, child: child),
         ),
