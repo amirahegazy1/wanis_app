@@ -68,7 +68,7 @@ class _EditKidProfileScreenState extends State<EditKidProfileScreen> {
                       ),
                       child: IconButton(
                         icon: const Icon(Icons.close, color: Color(0xFFA0AEC0)),
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () => Navigator.of(context).pop(), // This is fine since EditKidProfileScreen is pushed ON TOP of ProfileScreen
                       ),
                     ),
                   ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../home/presentation/screens/main_navigation_screen.dart';
 import 'package:wanis_app/features/profile/presentation/screens/edit_kid_profile_screen.dart';
 import 'package:wanis_app/features/parent/presentation/widgets/parent_gate_dialog.dart';
 
@@ -48,7 +50,18 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       child: IconButton(
                         icon: const Icon(Icons.close, color: Color(0xFFA0AEC0)),
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () {
+                          // The ProfileScreen is hosted inside MainNavigationScreen's IndexedStack.
+                          // Popping the context here will pop the entire MainNavigationScreen off the Navigator,
+                          // causing a black screen. Instead, we should navigate back to the MainNavigationScreen
+                          // (which defaults to the Home tab).
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (_) => const MainNavigationScreen(),
+                            ),
+                            (route) => false,
+                          );
+                        },
                       ),
                     ),
                   ],
