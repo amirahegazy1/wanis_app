@@ -164,10 +164,10 @@ class _WanisStoryWritingScreenState extends State<WanisStoryWritingScreen>
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                   decoration: BoxDecoration(
-                    color: emotionColor.withOpacity(0.15),
+                    color: emotionColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: emotionColor.withOpacity(0.3),
+                      color: emotionColor.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Text(
@@ -189,7 +189,7 @@ class _WanisStoryWritingScreenState extends State<WanisStoryWritingScreen>
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    emotionColor.withOpacity(0.8),
+                    emotionColor.withValues(alpha: 0.8),
                     emotionColor,
                   ],
                   begin: Alignment.topLeft,
@@ -198,7 +198,7 @@ class _WanisStoryWritingScreenState extends State<WanisStoryWritingScreen>
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: emotionColor.withOpacity(0.3),
+                    color: emotionColor.withValues(alpha: 0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -233,7 +233,7 @@ class _WanisStoryWritingScreenState extends State<WanisStoryWritingScreen>
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 15,
                     offset: const Offset(0, 4),
                   ),
@@ -258,7 +258,7 @@ class _WanisStoryWritingScreenState extends State<WanisStoryWritingScreen>
                 color: const Color(0xFFFFF5E6),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: const Color(0xFFF6AD55).withOpacity(0.3),
+                  color: const Color(0xFFF6AD55).withValues(alpha: 0.3),
                 ),
               ),
               child: Row(

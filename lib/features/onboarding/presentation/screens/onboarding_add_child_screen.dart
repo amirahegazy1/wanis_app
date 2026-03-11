@@ -17,13 +17,10 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
   @override
   Widget build(BuildContext context) {
     return OnboardingFrame(
-      child: Stack(
-        children: [
-          
-          SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 62, 24, 24),
-            child: Column(
-              children: [
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+        child: Column(
+          children: [
                 // Header – Figma: small icons + "ونيس" 20px Bold
                 const Icon(Icons.bubble_chart_rounded, color: OnboardingColors.primaryBlue, size: 30),
                 Text(
@@ -131,11 +128,8 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
                     );
                   },
                 ),
-              ],
-            ),
-          ),
-          
-        ],
+          ],
+        ),
       ),
     );
   }

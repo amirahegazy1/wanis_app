@@ -135,7 +135,7 @@ class _ColoringCanvasScreenState extends State<ColoringCanvasScreen> {
           border: Border.all(color: const Color(0xFFFFECCC), width: 2), // Light orange outer border
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: Colors.black.withValues(alpha: 0.02),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -231,7 +231,7 @@ class _ColoringCanvasScreenState extends State<ColoringCanvasScreen> {
           boxShadow: [
             if (!isSelected)
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),

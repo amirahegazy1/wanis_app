@@ -10,22 +10,19 @@ class OnboardingNewPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OnboardingFrame(
-      child: Stack(
-        children: [
-          
-          SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 86, 24, 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Back button
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back_rounded, size: 20),
-                  ),
-                ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Back button
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: const Icon(Icons.arrow_forward_rounded, size: 20),
+              ),
+            ),
                 const SizedBox(height: 22),
                 // Title – Figma: 28px Bold
                 Text(
@@ -49,7 +46,7 @@ class OnboardingNewPasswordScreen extends StatelessWidget {
                 OnboardingInput(
                   hint: '•••••••••',
                   obscureText: true,
-                  prefix: const Icon(Icons.visibility_off_outlined,
+                  suffix: const Icon(Icons.visibility_off_outlined,
                       color: OnboardingColors.muted, size: 22),
                 ),
                 const SizedBox(height: 24),
@@ -73,11 +70,8 @@ class OnboardingNewPasswordScreen extends StatelessWidget {
                     );
                   },
                 ),
-              ],
-            ),
-          ),
-          
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -157,10 +157,10 @@ class _SortingGameScreenState extends State<SortingGameScreen> {
           width: 140,
           height: 160,
           decoration: BoxDecoration(
-            color: isHovering ? bgColor.withOpacity(0.5) : bgColor,
+            color: isHovering ? bgColor.withValues(alpha: 0.5) : bgColor,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: isHovering ? color : color.withOpacity(0.5),
+              color: isHovering ? color : color.withValues(alpha: 0.5),
               width: 3,
             ),
           ),
@@ -184,7 +184,7 @@ class _SortingGameScreenState extends State<SortingGameScreen> {
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: color.withOpacity(0.2),
+                            color: color.withValues(alpha: 0.2),
                             shape: acceptedData == 'red' ? BoxShape.circle : BoxShape.rectangle,
                             borderRadius: acceptedData == 'blue' ? BorderRadius.circular(12) : null,
                           ),

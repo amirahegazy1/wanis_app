@@ -151,7 +151,7 @@ class _OnboardingLoginScreenState extends State<OnboardingLoginScreen> {
                 hint: '••••••••',
                 controller: _passwordController,
                 obscureText: _obscurePassword,
-                prefix: GestureDetector(
+                suffix: GestureDetector(
                   onTap: () => setState(() => _obscurePassword = !_obscurePassword),
                   child: Icon(
                     _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,

@@ -87,10 +87,10 @@ class _OnboardingForgotPasswordScreenState
             children: [
               // Back button
               Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.centerLeft,
                 child: GestureDetector(
                   onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.arrow_back_rounded, size: 20),
+                  child: const Icon(Icons.arrow_forward_rounded, size: 20),
                 ),
               ),
               const SizedBox(height: 16),

@@ -128,10 +128,6 @@ class _OnboardingSignUpScreenState extends State<OnboardingSignUpScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back_rounded, size: 20),
-                  ),
                   Text(
                     'حساب جديد 🚀',
                     style: readexPro(
@@ -139,6 +135,10 @@ class _OnboardingSignUpScreenState extends State<OnboardingSignUpScreen> {
                       fontSize: 32,
                       fontWeight: FontWeight.w700,
                     ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.arrow_forward_rounded, size: 20),
                   ),
                 ],
               ),
@@ -167,7 +167,7 @@ class _OnboardingSignUpScreenState extends State<OnboardingSignUpScreen> {
                 hint: '••••••••',
                 controller: _passwordController,
                 obscureText: _obscurePassword,
-                prefix: GestureDetector(
+                suffix: GestureDetector(
                   onTap: () => setState(() => _obscurePassword = !_obscurePassword),
                   child: Icon(
                     _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
@@ -183,6 +183,24 @@ class _OnboardingSignUpScreenState extends State<OnboardingSignUpScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: _agreedToTerms
+                              ? OnboardingColors.primaryBlue
+                              : OnboardingColors.border,
+                          width: 2,
+                        ),
+                        color: _agreedToTerms ? OnboardingColors.primaryBlue : Colors.white,
+                      ),
+                      child: _agreedToTerms
+                          ? const Icon(Icons.check, size: 16, color: Colors.white)
+                          : null,
+                    ),
+                    const SizedBox(width: 8),
                     Text.rich(
                       TextSpan(
                         children: [
@@ -200,24 +218,6 @@ class _OnboardingSignUpScreenState extends State<OnboardingSignUpScreen> {
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: _agreedToTerms
-                              ? OnboardingColors.primaryBlue
-                              : OnboardingColors.border,
-                          width: 2,
-                        ),
-                        color: _agreedToTerms ? OnboardingColors.primaryBlue : Colors.white,
-                      ),
-                      child: _agreedToTerms
-                          ? const Icon(Icons.check, size: 16, color: Colors.white)
-                          : null,
                     ),
                   ],
                 ),
@@ -241,49 +241,23 @@ class _OnboardingSignUpScreenState extends State<OnboardingSignUpScreen> {
               const SizedBox(height: 24),
               const OnboardingDividerOr(),
               const SizedBox(height: 18),
-              // Social buttons – side by side (Figma layout)
-              Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: _isLoading ? null : _signUpWithGoogle,
-                      child: Container(
-                        height: 56,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: OnboardingColors.border),
-                        ),
-                        alignment: Alignment.center,
-                        child: const Text('G',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF4285F4),
-                            )),
-                      ),
-                    ),
-                  ),
-                  if (_supportsAppleSignIn) ...[
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: _isLoading ? null : _signUpWithApple,
-                        child: Container(
-                          height: 56,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: OnboardingColors.border),
-                          ),
-                          alignment: Alignment.center,
-                          child: const Icon(Icons.apple, size: 28, color: Colors.black),
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
+              OnboardingSocialButton(
+                icon: const Text('G',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF4285F4))),
+                label: 'التسجيل عبر Google',
+                onTap: _isLoading ? null : _signUpWithGoogle,
               ),
+              if (_supportsAppleSignIn) ...[
+                const SizedBox(height: 16),
+                OnboardingSocialButton(
+                  icon: const Icon(Icons.apple, size: 22, color: Colors.black),
+                  label: 'التسجيل عبر Apple',
+                  onTap: _isLoading ? null : _signUpWithApple,
+                ),
+              ],
               const SizedBox(height: 18),
               Center(
                 child: GestureDetector(

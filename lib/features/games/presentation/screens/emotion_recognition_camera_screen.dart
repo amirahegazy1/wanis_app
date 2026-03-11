@@ -272,7 +272,7 @@ class _EmotionRecognitionCameraScreenState
               right: 16,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
@@ -292,11 +292,11 @@ class _EmotionRecognitionCameraScreenState
                 padding:
                     const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.95),
+                  color: Colors.white.withValues(alpha: 0.95),
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -338,8 +338,8 @@ class _EmotionRecognitionCameraScreenState
                     borderRadius: BorderRadius.circular(130),
                     border: Border.all(
                       color: _currentEmotionLabel.isEmpty
-                          ? Colors.white.withOpacity(0.5)
-                          : _getEmotionColor().withOpacity(0.8),
+                          ? Colors.white.withValues(alpha: 0.5)
+                          : _getEmotionColor().withValues(alpha: 0.8),
                       width: 3,
                     ),
                   ),
@@ -361,7 +361,7 @@ class _EmotionRecognitionCameraScreenState
                       child: Text(
                         'الثقة: ${(_currentConfidence * 100).toStringAsFixed(0)}%',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                           fontSize: 13,
                         ),
                       ),
@@ -374,7 +374,7 @@ class _EmotionRecognitionCameraScreenState
                         horizontal: 28, vertical: 10),
                     decoration: BoxDecoration(
                       color: _currentEmotionLabel.isEmpty
-                          ? Colors.white.withOpacity(0.2)
+                          ? Colors.white.withValues(alpha: 0.2)
                           : _getEmotionColor(),
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
@@ -382,7 +382,7 @@ class _EmotionRecognitionCameraScreenState
                           color: (_currentEmotionLabel.isEmpty
                                   ? Colors.black
                                   : _getEmotionColor())
-                              .withOpacity(0.3),
+                              .withValues(alpha: 0.3),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
@@ -415,7 +415,7 @@ class _EmotionRecognitionCameraScreenState
                         ),
                         elevation: 8,
                         shadowColor:
-                            const Color(0xFF5D9CEC).withOpacity(0.4),
+                            const Color(0xFF5D9CEC).withValues(alpha: 0.4),
                       ),
                       child: const Text(
                         'خلي ونيس يكتب قصتك ✍️',

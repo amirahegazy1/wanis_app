@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'games_dialogs.dart';
 
@@ -199,7 +198,7 @@ class _MatchingFeelingsGameScreenState extends State<MatchingFeelingsGameScreen>
       child: isMatched
           ? Container(
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: const Icon(Icons.check, color: Colors.white, size: 40),

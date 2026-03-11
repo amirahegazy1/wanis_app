@@ -114,11 +114,11 @@ class OnboardingInput extends StatelessWidget {
             borderSide: const BorderSide(color: OnboardingColors.primaryBlue, width: 1.5),
           ),
           prefixIcon: prefix != null
-              ? Padding(padding: const EdgeInsets.only(left: 12), child: prefix)
+              ? Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: prefix)
               : null,
           prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
           suffixIcon: suffix != null
-              ? Padding(padding: const EdgeInsets.only(right: 12), child: suffix)
+              ? Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: suffix)
               : null,
           suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         ),

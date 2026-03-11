@@ -10,22 +10,19 @@ class OnboardingOtpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OnboardingFrame(
-      child: Stack(
-        children: [
-          
-          SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 86, 24, 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Back button
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back_rounded, size: 20),
-                  ),
-                ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Back button
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: const Icon(Icons.arrow_forward_rounded, size: 20),
+              ),
+            ),
                 const SizedBox(height: 18),
                 // Title – Figma: 28px Bold
                 Text(
@@ -82,11 +79,8 @@ class OnboardingOtpScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 const _OtpKeyboardPlaceholder(),
-              ],
-            ),
-          ),
-          
-        ],
+          ],
+        ),
       ),
     );
   }
