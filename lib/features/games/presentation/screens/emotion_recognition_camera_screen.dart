@@ -1,4 +1,5 @@
-import 'dart:async';
+import 'dart:io';
+import 'dart:developer' as developer;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -23,18 +24,18 @@ class _EmotionRecognitionCameraScreenState
 
   final EmotionService _emotionService = EmotionService();
 
-  String _currentEmotionLabel = '';
-  String _currentEmotionArabic = 'جاري التحليل...';
-  String _currentEmotionEmoji = '🔍';
-  double _currentConfidence = 0.0;
+  // Screen states
   bool _isInitializing = true;
   bool _hasError = false;
   String _errorMessage = '';
   bool _isCameraReady = false;
 
-  // Throttle inference to avoid overloading
-  DateTime _lastInferenceTime = DateTime.now();
-  static const Duration _inferenceInterval = Duration(milliseconds: 500);
+  // Capture & analysis states
+  bool _isAnalyzing = false;
+  bool _isFrozen = false;
+  String? _capturedImagePath;
+  EmotionResult? _analysisResult;
+  String _analysisStatusText = '';
 
   @override
   void initState() {
@@ -45,7 +46,7 @@ class _EmotionRecognitionCameraScreenState
 
   Future<void> _initializeAll() async {
     try {
-      // Initialize emotion service
+      // Initialize emotion service (loads model + face detector)
       await _emotionService.initialize();
 
       // Get available cameras
@@ -67,6 +68,7 @@ class _EmotionRecognitionCameraScreenState
 
       await _initializeCamera();
     } catch (e) {
+      developer.log('CameraScreen: Init error: $e', name: 'EmotionCamera');
       if (mounted) {
         setState(() {
           _hasError = true;
@@ -84,7 +86,6 @@ class _EmotionRecognitionCameraScreenState
       _selectedCamera!,
       ResolutionPreset.medium,
       enableAudio: false,
-      imageFormatGroup: ImageFormatGroup.yuv420,
     );
 
     try {
@@ -95,10 +96,8 @@ class _EmotionRecognitionCameraScreenState
         _isCameraReady = true;
         _isInitializing = false;
       });
-
-      // Start the image stream for real-time analysis
-      _cameraController!.startImageStream(_onCameraFrame);
     } catch (e) {
+      developer.log('CameraScreen: Camera init error: $e', name: 'EmotionCamera');
       if (mounted) {
         setState(() {
           _hasError = true;
@@ -109,54 +108,92 @@ class _EmotionRecognitionCameraScreenState
     }
   }
 
-  void _onCameraFrame(CameraImage image) {
-    // Throttle inference
-    final now = DateTime.now();
-    if (now.difference(_lastInferenceTime) < _inferenceInterval) return;
-    _lastInferenceTime = now;
+  /// Called when the user presses the main action button.
+  /// Captures a photo, freezes preview, analyzes, shows result, then navigates.
+  Future<void> _onCaptureAndAnalyze() async {
+    if (_isAnalyzing || !_isCameraReady || _cameraController == null) return;
 
-    _emotionService.processFrame(image, _selectedCamera!).then((result) {
-      if (result != null && mounted) {
-        final arabic =
-            LocalTherapeuticStoryService.getEmotionArabic(result.label);
-        setState(() {
-          _currentEmotionLabel = result.label;
-          _currentEmotionArabic = arabic.name;
-          _currentEmotionEmoji = arabic.emoji;
-          _currentConfidence = result.confidence;
-        });
-      }
+    setState(() {
+      _isAnalyzing = true;
+      _isFrozen = false;
+      _analysisResult = null;
+      _analysisStatusText = 'جاري التقاط الصورة... 📸';
     });
+
+    try {
+      // Step 1: Capture photo
+      final XFile photo = await _cameraController!.takePicture();
+      developer.log('CameraScreen: Photo captured: ${photo.path}', name: 'EmotionCamera');
+
+      setState(() {
+        _capturedImagePath = photo.path;
+        _isFrozen = true;
+        _analysisStatusText = 'جاري تحليل مشاعرك... 🔍';
+      });
+
+      // Step 2: Analyze the captured image
+      final result = await _emotionService.processImageFile(photo.path);
+
+      if (!mounted) return;
+
+      if (result != null) {
+        final arabic = LocalTherapeuticStoryService.getEmotionArabic(result.label);
+
+        setState(() {
+          _analysisResult = result;
+          _analysisStatusText = 'تم التعرف على شعورك! ${arabic.emoji}';
+        });
+
+        // Brief pause to show the result before navigating
+        await Future.delayed(const Duration(milliseconds: 1200));
+
+        if (!mounted) return;
+
+        // Step 3: Navigate to story screen
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WanisStoryWritingScreen(
+              detectedEmotion: result.label,
+            ),
+          ),
+        );
+
+        // When coming back, reset to live preview
+        if (mounted) _resetToLivePreview();
+      } else {
+        // No face detected
+        setState(() {
+          _analysisStatusText = 'مش شايف وشك! حط وشك جوا الدايرة وجرب تاني 😊';
+          _isAnalyzing = false;
+        });
+
+        // Auto-reset after a delay
+        await Future.delayed(const Duration(seconds: 2));
+        if (mounted) _resetToLivePreview();
+      }
+    } catch (e, stack) {
+      developer.log('CameraScreen: Capture/analyze error: $e\n$stack', name: 'EmotionCamera');
+      if (mounted) {
+        setState(() {
+          _analysisStatusText = 'حصل خطأ، جرب تاني!';
+          _isAnalyzing = false;
+        });
+
+        await Future.delayed(const Duration(seconds: 2));
+        if (mounted) _resetToLivePreview();
+      }
+    }
   }
 
-  void _onWriteStoryPressed() {
-    if (_currentEmotionLabel.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('انتظر حتى يتم التعرف على مشاعرك أولاً!'),
-          backgroundColor: Color(0xFFE53E3E),
-        ),
-      );
-      return;
-    }
-
-    // Stop the camera stream before navigating
-    _cameraController?.stopImageStream();
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => WanisStoryWritingScreen(
-          detectedEmotion: _currentEmotionLabel,
-        ),
-      ),
-    ).then((_) {
-      // Resume the camera stream when coming back
-      if (_cameraController != null &&
-          _cameraController!.value.isInitialized &&
-          !_cameraController!.value.isStreamingImages) {
-        _cameraController!.startImageStream(_onCameraFrame);
-      }
+  /// Resets the screen back to live camera preview.
+  void _resetToLivePreview() {
+    setState(() {
+      _isFrozen = false;
+      _isAnalyzing = false;
+      _capturedImagePath = null;
+      _analysisResult = null;
+      _analysisStatusText = '';
     });
   }
 
@@ -180,8 +217,8 @@ class _EmotionRecognitionCameraScreenState
     super.dispose();
   }
 
-  Color _getEmotionColor() {
-    switch (_currentEmotionLabel) {
+  Color _getEmotionColor(String label) {
+    switch (label) {
       case 'Happiness':
         return const Color(0xFF48C774);
       case 'Sadness':
@@ -210,8 +247,15 @@ class _EmotionRecognitionCameraScreenState
       body: SafeArea(
         child: Stack(
           children: [
-            // Camera Preview
-            if (_isCameraReady && _cameraController != null)
+            // Camera Preview or Frozen Image
+            if (_isFrozen && _capturedImagePath != null)
+              Positioned.fill(
+                child: Image.file(
+                  File(_capturedImagePath!),
+                  fit: BoxFit.cover,
+                ),
+              )
+            else if (_isCameraReady && _cameraController != null)
               Positioned.fill(
                 child: ClipRRect(
                   child: FittedBox(
@@ -266,6 +310,14 @@ class _EmotionRecognitionCameraScreenState
                 ),
               ),
 
+            // Analyzing overlay
+            if (_isAnalyzing)
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black.withValues(alpha: 0.4),
+                ),
+              ),
+
             // Close Button
             Positioned(
               top: 16,
@@ -305,18 +357,20 @@ class _EmotionRecognitionCameraScreenState
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    const Text(
                       'كاميرا ونيس الذكية',
                       style: TextStyle(
                         fontSize: 14,
-                        color: const Color(0xFFA0AEC0),
+                        color: Color(0xFFA0AEC0),
                         fontWeight: FontWeight.normal,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      'وريني وشك الحلو يا بطل! 📸',
-                      style: TextStyle(
+                    Text(
+                      _isAnalyzing
+                          ? _analysisStatusText
+                          : 'وريني وشك الحلو يا بطل! 📸',
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF2D3748),
@@ -328,8 +382,8 @@ class _EmotionRecognitionCameraScreenState
               ),
             ),
 
-            // Face Guide Overlay (dashed oval border)
-            if (_isCameraReady)
+            // Face Guide Overlay (oval border)
+            if (_isCameraReady && !_isFrozen)
               Center(
                 child: Container(
                   width: 260,
@@ -337,16 +391,43 @@ class _EmotionRecognitionCameraScreenState
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(130),
                     border: Border.all(
-                      color: _currentEmotionLabel.isEmpty
-                          ? Colors.white.withValues(alpha: 0.5)
-                          : _getEmotionColor().withValues(alpha: 0.8),
+                      color: Colors.white.withValues(alpha: 0.5),
                       width: 3,
                     ),
                   ),
                 ),
               ),
 
-            // Bottom Actions
+            // Analysis result overlay (when frozen with result)
+            if (_isFrozen && _analysisResult != null)
+              Center(
+                child: _buildResultBadge(),
+              ),
+
+            // Analyzing spinner overlay
+            if (_isAnalyzing && _analysisResult == null)
+              const Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 3,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'جاري التحليل...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            // Bottom Action
             Positioned(
               bottom: 48,
               left: 24,
@@ -354,62 +435,18 @@ class _EmotionRecognitionCameraScreenState
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Confidence indicator
-                  if (_currentEmotionLabel.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text(
-                        'الثقة: ${(_currentConfidence * 100).toStringAsFixed(0)}%',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.8),
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-
-                  // Emotion Chip
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 28, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: _currentEmotionLabel.isEmpty
-                          ? Colors.white.withValues(alpha: 0.2)
-                          : _getEmotionColor(),
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: (_currentEmotionLabel.isEmpty
-                                  ? Colors.black
-                                  : _getEmotionColor())
-                              .withValues(alpha: 0.3),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      _currentEmotionLabel.isEmpty
-                          ? '$_currentEmotionArabic $_currentEmotionEmoji'
-                          : '$_currentEmotionArabic $_currentEmotionEmoji',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
                   // Action Button
                   SizedBox(
                     width: double.infinity,
                     height: 60,
                     child: ElevatedButton(
-                      onPressed: _onWriteStoryPressed,
+                      onPressed: (_isCameraReady && !_isAnalyzing)
+                          ? _onCaptureAndAnalyze
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF5D9CEC),
+                        disabledBackgroundColor:
+                            const Color(0xFF5D9CEC).withValues(alpha: 0.5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -417,17 +454,79 @@ class _EmotionRecognitionCameraScreenState
                         shadowColor:
                             const Color(0xFF5D9CEC).withValues(alpha: 0.4),
                       ),
-                      child: const Text(
-                        'خلي ونيس يكتب قصتك ✍️',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: _isAnalyzing
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : const Text(
+                              'خلي ونيس يكتب قصتك ✍️',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Builds a floating badge showing the detected emotion over the frozen image.
+  Widget _buildResultBadge() {
+    final result = _analysisResult!;
+    final arabic = LocalTherapeuticStoryService.getEmotionArabic(result.label);
+    final color = _getEmotionColor(result.label);
+
+    return AnimatedScale(
+      scale: 1.0,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.elasticOut,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.4),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              arabic.emoji,
+              style: const TextStyle(fontSize: 48),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              arabic.name,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'الثقة: ${(result.confidence * 100).toStringAsFixed(0)}%',
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.9),
+                fontSize: 14,
               ),
             ),
           ],
