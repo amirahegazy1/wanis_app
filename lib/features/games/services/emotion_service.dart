@@ -54,7 +54,9 @@ class EmotionService {
           .map((l) => l.trim())
           .where((l) => l.isNotEmpty)
           .toList();
-      developer.log('EmotionService: Loaded ${_labels.length} emotion labels: $_labels');
+      developer.log(
+        'EmotionService: Loaded ${_labels.length} emotion labels: $_labels',
+      );
 
       // Load TFLite model
       _interpreter = await Interpreter.fromAsset(_modelPath);
@@ -74,7 +76,10 @@ class EmotionService {
 
       _isInitialized = true;
     } catch (e, stack) {
-      developer.log('EmotionService: Initialization error: $e\n$stack', name: 'EmotionService');
+      developer.log(
+        'EmotionService: Initialization error: $e\n$stack',
+        name: 'EmotionService',
+      );
       rethrow;
     }
   }
@@ -88,7 +93,10 @@ class EmotionService {
     CameraDescription camera,
   ) async {
     if (!_isInitialized) {
-      developer.log('EmotionService: processFrame called before initialization', name: 'EmotionService');
+      developer.log(
+        'EmotionService: processFrame called before initialization',
+        name: 'EmotionService',
+      );
       return null;
     }
     if (_isBusy) return null;
@@ -98,7 +106,10 @@ class EmotionService {
       // Step 1: Detect faces using ML Kit
       final inputImage = _convertCameraImageToInputImage(cameraImage, camera);
       if (inputImage == null) {
-        developer.log('EmotionService: Failed to convert camera image to InputImage', name: 'EmotionService');
+        developer.log(
+          'EmotionService: Failed to convert camera image to InputImage',
+          name: 'EmotionService',
+        );
         return null;
       }
 
@@ -106,7 +117,10 @@ class EmotionService {
       try {
         faces = await _faceDetector!.processImage(inputImage);
       } catch (faceError) {
-        developer.log('EmotionService: Face detection threw: $faceError', name: 'EmotionService');
+        developer.log(
+          'EmotionService: Face detection threw: $faceError',
+          name: 'EmotionService',
+        );
         return null;
       }
 
@@ -114,20 +128,34 @@ class EmotionService {
         return null;
       }
 
-      developer.log('EmotionService: ${faces.length} face(s) detected', name: 'EmotionService');
+      developer.log(
+        'EmotionService: ${faces.length} face(s) detected',
+        name: 'EmotionService',
+      );
 
       // Step 2: Convert camera image to img.Image for cropping
       final fullImage = _convertCameraImageToImage(cameraImage);
       if (fullImage == null) {
-        developer.log('EmotionService: Failed to convert CameraImage to img.Image', name: 'EmotionService');
+        developer.log(
+          'EmotionService: Failed to convert CameraImage to img.Image',
+          name: 'EmotionService',
+        );
         return null;
       }
 
       // Step 3: Crop the face region
       final face = faces.first;
-      final faceImage = _cropFace(fullImage, face.boundingBox, cameraImage.width, cameraImage.height);
+      final faceImage = _cropFace(
+        fullImage,
+        face.boundingBox,
+        cameraImage.width,
+        cameraImage.height,
+      );
       if (faceImage == null) {
-        developer.log('EmotionService: Failed to crop face region (bbox: ${face.boundingBox})', name: 'EmotionService');
+        developer.log(
+          'EmotionService: Failed to crop face region (bbox: ${face.boundingBox})',
+          name: 'EmotionService',
+        );
         return null;
       }
 
@@ -139,7 +167,10 @@ class EmotionService {
       try {
         _interpreter!.run(input, output);
       } catch (inferenceError, inferenceStack) {
-        developer.log('EmotionService: TFLite inference failed: $inferenceError\n$inferenceStack', name: 'EmotionService');
+        developer.log(
+          'EmotionService: TFLite inference failed: $inferenceError\n$inferenceStack',
+          name: 'EmotionService',
+        );
         return null;
       }
 
@@ -160,11 +191,17 @@ class EmotionService {
       }
 
       if (maxIndex >= _labels.length) {
-        developer.log('EmotionService: maxIndex $maxIndex out of bounds for ${_labels.length} labels', name: 'EmotionService');
+        developer.log(
+          'EmotionService: maxIndex $maxIndex out of bounds for ${_labels.length} labels',
+          name: 'EmotionService',
+        );
         return null;
       }
 
-      developer.log('EmotionService: Detected ${_labels[maxIndex]} (${(maxProb * 100).toStringAsFixed(1)}%)', name: 'EmotionService');
+      developer.log(
+        'EmotionService: Detected ${_labels[maxIndex]} (${(maxProb * 100).toStringAsFixed(1)}%)',
+        name: 'EmotionService',
+      );
 
       return EmotionResult(
         label: _labels[maxIndex],
@@ -172,7 +209,10 @@ class EmotionService {
         probabilities: normalizedProbs,
       );
     } catch (e, stack) {
-      developer.log('EmotionService: Unexpected processFrame error: $e\n$stack', name: 'EmotionService');
+      developer.log(
+        'EmotionService: Unexpected processFrame error: $e\n$stack',
+        name: 'EmotionService',
+      );
       return null;
     } finally {
       _isBusy = false;
@@ -211,9 +251,14 @@ class EmotionService {
         final planes = image.planes;
         final bytes = _concatenatePlanes(planes);
 
-        final inputImageFormat = InputImageFormatValue.fromRawValue(image.format.raw as int);
+        final inputImageFormat = InputImageFormatValue.fromRawValue(
+          image.format.raw as int,
+        );
         if (inputImageFormat == null) {
-          developer.log('EmotionService: Invalid input image format', name: 'EmotionService');
+          developer.log(
+            'EmotionService: Invalid input image format',
+            name: 'EmotionService',
+          );
           return null;
         }
 
@@ -242,10 +287,16 @@ class EmotionService {
         );
       }
 
-      developer.log('EmotionService: Unsupported format group: ${image.format.group}', name: 'EmotionService');
+      developer.log(
+        'EmotionService: Unsupported format group: ${image.format.group}',
+        name: 'EmotionService',
+      );
       return null;
     } catch (e, stack) {
-      developer.log('EmotionService: Error in _convertCameraImageToInputImage: $e\n$stack', name: 'EmotionService');
+      developer.log(
+        'EmotionService: Error in _convertCameraImageToInputImage: $e\n$stack',
+        name: 'EmotionService',
+      );
       return null;
     }
   }
@@ -356,7 +407,11 @@ class EmotionService {
   /// Returns a flat list that TFLite interpreter can process.
   List<List<List<List<double>>>> _preprocessImage(img.Image faceImage) {
     // Resize to 48x48
-    final resized = img.copyResize(faceImage, width: _inputSize, height: _inputSize);
+    final resized = img.copyResize(
+      faceImage,
+      width: _inputSize,
+      height: _inputSize,
+    );
 
     // Convert to grayscale and normalize to [0, 1]
     // Shape: [1, 48, 48, 1]
@@ -364,20 +419,17 @@ class EmotionService {
       1,
       (_) => List.generate(
         _inputSize,
-        (y) => List.generate(
-          _inputSize,
-          (x) {
-            // Get pixel and extract RGB values
-            final pixel = resized.getPixel(x, y);
-            // Extract RGB components - pixel has r, g, b as int properties
-            final r = pixel.r.toDouble();
-            final g = pixel.g.toDouble();
-            final b = pixel.b.toDouble();
-            // Convert to grayscale using luminosity method
-            final gray = (0.299 * r + 0.587 * g + 0.114 * b);
-            return [gray / 255.0]; // Normalize to [0, 1], shape per pixel: [1]
-          },
-        ),
+        (y) => List.generate(_inputSize, (x) {
+          // Get pixel and extract RGB values
+          final pixel = resized.getPixel(x, y);
+          // Extract RGB components - pixel has r, g, b as int properties
+          final r = pixel.r.toDouble();
+          final g = pixel.g.toDouble();
+          final b = pixel.b.toDouble();
+          // Convert to grayscale using luminosity method
+          final gray = (0.299 * r + 0.587 * g + 0.114 * b);
+          return [gray / 255.0]; // Normalize to [0, 1], shape per pixel: [1]
+        }),
       ),
     );
     return input;
@@ -397,7 +449,10 @@ class EmotionService {
   /// Takes the file path from [CameraController.takePicture()].
   Future<EmotionResult?> processImageFile(String filePath) async {
     if (!_isInitialized) {
-      developer.log('EmotionService: processImageFile called before initialization', name: 'EmotionService');
+      developer.log(
+        'EmotionService: processImageFile called before initialization',
+        name: 'EmotionService',
+      );
       return null;
     }
 
@@ -409,30 +464,50 @@ class EmotionService {
       try {
         faces = await _faceDetector!.processImage(inputImage);
       } catch (faceError) {
-        developer.log('EmotionService: Face detection threw: $faceError', name: 'EmotionService');
+        developer.log(
+          'EmotionService: Face detection threw: $faceError',
+          name: 'EmotionService',
+        );
         return null;
       }
 
       if (faces.isEmpty) {
-        developer.log('EmotionService: No faces found in captured image', name: 'EmotionService');
+        developer.log(
+          'EmotionService: No faces found in captured image',
+          name: 'EmotionService',
+        );
         return null;
       }
 
-      developer.log('EmotionService: ${faces.length} face(s) detected in file', name: 'EmotionService');
+      developer.log(
+        'EmotionService: ${faces.length} face(s) detected in file',
+        name: 'EmotionService',
+      );
 
       // Step 2: Load the image file as img.Image for cropping
       final fileBytes = await File(filePath).readAsBytes();
       final fullImage = img.decodeImage(fileBytes);
       if (fullImage == null) {
-        developer.log('EmotionService: Failed to decode image file', name: 'EmotionService');
+        developer.log(
+          'EmotionService: Failed to decode image file',
+          name: 'EmotionService',
+        );
         return null;
       }
 
       // Step 3: Crop the face region
       final face = faces.first;
-      final faceImage = _cropFace(fullImage, face.boundingBox, fullImage.width, fullImage.height);
+      final faceImage = _cropFace(
+        fullImage,
+        face.boundingBox,
+        fullImage.width,
+        fullImage.height,
+      );
       if (faceImage == null) {
-        developer.log('EmotionService: Failed to crop face region (bbox: ${face.boundingBox})', name: 'EmotionService');
+        developer.log(
+          'EmotionService: Failed to crop face region (bbox: ${face.boundingBox})',
+          name: 'EmotionService',
+        );
         return null;
       }
 
@@ -444,7 +519,10 @@ class EmotionService {
       try {
         _interpreter!.run(input, output);
       } catch (inferenceError, inferenceStack) {
-        developer.log('EmotionService: TFLite inference failed: $inferenceError\n$inferenceStack', name: 'EmotionService');
+        developer.log(
+          'EmotionService: TFLite inference failed: $inferenceError\n$inferenceStack',
+          name: 'EmotionService',
+        );
         return null;
       }
 
@@ -465,11 +543,17 @@ class EmotionService {
       }
 
       if (maxIndex >= _labels.length) {
-        developer.log('EmotionService: maxIndex $maxIndex out of bounds', name: 'EmotionService');
+        developer.log(
+          'EmotionService: maxIndex $maxIndex out of bounds',
+          name: 'EmotionService',
+        );
         return null;
       }
 
-      developer.log('EmotionService: Detected ${_labels[maxIndex]} (${(maxProb * 100).toStringAsFixed(1)}%) from file', name: 'EmotionService');
+      developer.log(
+        'EmotionService: Detected ${_labels[maxIndex]} (${(maxProb * 100).toStringAsFixed(1)}%) from file',
+        name: 'EmotionService',
+      );
 
       return EmotionResult(
         label: _labels[maxIndex],
@@ -477,7 +561,10 @@ class EmotionService {
         probabilities: normalizedProbs,
       );
     } catch (e, stack) {
-      developer.log('EmotionService: processImageFile error: $e\n$stack', name: 'EmotionService');
+      developer.log(
+        'EmotionService: processImageFile error: $e\n$stack',
+        name: 'EmotionService',
+      );
       return null;
     }
   }
