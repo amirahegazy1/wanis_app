@@ -11,13 +11,16 @@ class StoryPlayerScreen extends StatelessWidget {
         child: Column(
           children: [
             _buildAppBar(context),
+            const SizedBox(height: 16),
+            Flexible(
+              flex: 5,
+              child: _buildStoryIllustration(),
+            ),
             const SizedBox(height: 24),
-            _buildStoryIllustration(),
-            const SizedBox(height: 48),
             _buildStoryText(),
             const Spacer(),
             _buildPlaybackControls(),
-            const SizedBox(height: 40),
+            SizedBox(height: MediaQuery.of(context).padding.bottom + 24),
           ],
         ),
       ),
@@ -77,22 +80,21 @@ class StoryPlayerScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Container(
-        height: 300,
+        width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color(0xFFF0F4F8), // Background placeholder matching the room vibes
+          color: const Color(0xFFF0F4F8),
           borderRadius: BorderRadius.circular(24),
         ),
         clipBehavior: Clip.antiAlias,
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Using text emojis as a placeholder for the rich SVG illustrations
             const Text(
               '🧸 🛋️ 🚪',
               style: TextStyle(fontSize: 60),
             ),
             Positioned(
-              bottom: 20,
+              bottom: 16,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(

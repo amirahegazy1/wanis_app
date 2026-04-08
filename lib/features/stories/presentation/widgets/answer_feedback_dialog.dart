@@ -59,11 +59,13 @@ class AnswerFeedbackDialog extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                fontSize: 32, // Large title from figma
+                fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: titleColor,
               ),
               textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 8),
             Text(

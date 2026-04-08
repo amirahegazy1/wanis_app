@@ -130,11 +130,9 @@ class StoriesListScreen extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Play icon
                     Container(
                       width: 40,
                       height: 40,
@@ -148,11 +146,10 @@ class StoriesListScreen extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    
-                    // Texts
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
@@ -163,6 +160,8 @@ class StoriesListScreen extends StatelessWidget {
                               color: Color(0xFF2D3748),
                             ),
                             textAlign: TextAlign.right,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -172,11 +171,12 @@ class StoriesListScreen extends StatelessWidget {
                               color: Color(0xFFA0AEC0),
                             ),
                             textAlign: TextAlign.right,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 8),
                   ],
                 ),
               ),
