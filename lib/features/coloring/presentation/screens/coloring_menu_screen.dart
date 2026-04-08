@@ -161,12 +161,8 @@ class ColoringMenuScreen extends StatelessWidget {
   Widget _buildLockedCard() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F9FC), // Light gray background
+        color: const Color(0xFFF7F9FC),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFFE2E8F0),
-          style: BorderStyle.none,
-        ),
       ),
       child: CustomPaint(
         painter: DashedBorderPainter(color: const Color(0xFFE2E8F0)),

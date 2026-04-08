@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 import '../../../home/presentation/screens/main_navigation_screen.dart';
 import '../screens/coloring_menu_screen.dart';
@@ -142,9 +142,9 @@ class ColoringSuccessDialog extends StatelessWidget {
   Widget _buildSecondaryButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Pop the dialog and go back to the menu
-        Navigator.of(context).pop();
-        Navigator.of(context).pushReplacement(
+        final navigator = Navigator.of(context);
+        navigator.pop();
+        navigator.pushReplacement(
           MaterialPageRoute(builder: (_) => const ColoringMenuScreen()),
         );
       },
