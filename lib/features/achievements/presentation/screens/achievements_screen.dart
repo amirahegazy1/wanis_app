@@ -19,7 +19,7 @@ class AchievementsScreen extends StatelessWidget {
               _buildBadgesTitle(),
               const SizedBox(height: 16),
               _buildBadgesGrid(),
-              const SizedBox(height: 40),
+              const SizedBox(height: 128),
             ],
           ),
         ),

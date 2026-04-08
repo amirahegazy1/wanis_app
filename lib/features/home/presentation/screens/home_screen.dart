@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
               _buildActivityLibraryTitle(),
               const SizedBox(height: 16),
               _buildGridSection(context),
-              const SizedBox(height: 40),
+              const SizedBox(height: 128),
             ],
           ),
         ),
