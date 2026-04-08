@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '../../data/story_data.dart';
+import 'story_player_screen.dart';
+
 class StoriesListScreen extends StatelessWidget {
   const StoriesListScreen({super.key});
+
+  static const _subtitles = [
+    'التحكم في الغضب',
+    'التعاطف والرفق',
+    'المفاجآت والمشاعر',
+  ];
+
+  static const _bgColors = [
+    Color(0xFFEBF8FF),
+    Color(0xFFFFF5F5),
+    Color(0xFFF0FFF4),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -13,34 +28,25 @@ class StoriesListScreen extends StatelessWidget {
             _buildAppBar(context),
             const SizedBox(height: 24),
             Expanded(
-              child: ListView(
+              child: ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                children: [
-                  _buildStoryCard(
-                    title: 'عمر ولعبته الضائعة',
-                    subtitle: 'التحكم في الغضب',
-                    emoji: '🧸',
-                    bgColor: const Color(0xFFEBF8FF),
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 20),
-                  _buildStoryCard(
-                    title: 'سامي والكلب الخائف',
-                    subtitle: 'التعاطف والرفق',
-                    emoji: '🐕',
-                    bgColor: const Color(0xFFFFF5F5),
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 20),
-                  _buildStoryCard(
-                    title: 'ليلى والمفاجأة الكبيرة',
-                    subtitle: 'المفاجآت والمشاعر',
-                    emoji: '🎁',
-                    bgColor: const Color(0xFFF0FFF4),
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 20),
-                ],
+                itemCount: localStories.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 20),
+                itemBuilder: (context, i) {
+                  final story = localStories[i];
+                  return _buildStoryCard(
+                    title: story.title,
+                    subtitle: _subtitles[i],
+                    emoji: story.emoji,
+                    bgColor: _bgColors[i],
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => StoryPlayerScreen(story: story),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
