@@ -11,22 +11,31 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomNavHeight = 80.0 + 24.0 + MediaQuery.of(context).padding.bottom;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      // Removed status bar / app bar as requested, and bottom nav is custom
       body: SafeArea(
-        child: SingleChildScrollView(
+        bottom: false,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomNavHeight),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _buildHeader(),
-              const SizedBox(height: 24),
-              _buildHeroCard(context),
-              const SizedBox(height: 32),
-              _buildActivityLibraryTitle(),
+              const SizedBox(height: 12),
+              Flexible(
+                flex: 3,
+                child: _buildHeroCard(context),
+              ),
               const SizedBox(height: 16),
-              _buildGridSection(context),
-              const SizedBox(height: 128),
+              _buildActivityLibraryTitle(),
+              const SizedBox(height: 12),
+              Flexible(
+                flex: 4,
+                child: _buildGridSection(context),
+              ),
+              const SizedBox(height: 8),
             ],
           ),
         ),
@@ -36,11 +45,10 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Points badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
@@ -50,7 +58,7 @@ class HomeScreen extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const Icon(Icons.star, color: Color(0xFFF4A261), size: 16), // Using standard icon as placeholder for the star
+                const Icon(Icons.star, color: Color(0xFFF4A261), size: 16),
                 const SizedBox(width: 4),
                 const Text(
                   '150',
@@ -64,8 +72,6 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-
-          // User info
           Row(
             children: [
               Column(
@@ -74,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     'أهلاً زين 👋',
                     style: TextStyle(
-                      fontSize: 24, // Adjusted size to fit better based on typical Readex Pro
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF2D3748),
                     ),
@@ -89,7 +95,6 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(width: 16),
-              // Avatar
               Container(
                 width: 60,
                 height: 60,
@@ -120,85 +125,80 @@ class HomeScreen extends StatelessWidget {
         );
       },
       child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 26),
-      child: Container(
-        height: 240,
-        decoration: BoxDecoration(
-          color: const Color(0xFF5D9CEC), // Primary blue
-          borderRadius: BorderRadius.circular(20),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Stack(
-          children: [
-            // Mock background elements from figma
-            Positioned(
-              left: -40,
-              bottom: -40,
-              child: Opacity(
-                opacity: 0.1,
+        padding: const EdgeInsets.symmetric(horizontal: 26),
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF5D9CEC),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            children: [
+              Positioned(
+                left: -40,
+                bottom: -40,
+                child: Opacity(
+                  opacity: 0.1,
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ),
+              const Positioned(
+                top: 20,
+                right: 80,
+                child: Text('📖', style: TextStyle(fontSize: 80)),
+              ),
+              Positioned(
+                bottom: 16,
+                left: 16,
                 child: Container(
-                  width: 200,
-                  height: 200,
+                  width: 56,
+                  height: 56,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                ),
-              ),
-            ),
-            // Book icon big center
-            const Positioned(
-              top: 40,
-              right: 80,
-              child: Text('📖', style: TextStyle(fontSize: 80)),
-            ),
-            // Play button
-            Positioned(
-              bottom: 20,
-              left: 20,
-              child: Container(
-                width: 64,
-                height: 64,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.play_arrow_rounded,
-                  color: Color(0xFF5D9CEC),
-                  size: 32,
-                ),
-              ),
-            ),
-            // Text Content
-            Positioned(
-              bottom: 30,
-              right: 20,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'قصة: عمر واللعبة',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white, // Changed to white because figma color code seemed to be on a blue BG
-                    ),
+                  child: const Icon(
+                    Icons.play_arrow_rounded,
+                    color: Color(0xFF5D9CEC),
+                    size: 28,
                   ),
-                  SizedBox(height: 4),
-                  Text(
-                    'تعلم كيف تطلب المساعدة بهدوء',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
+              Positioned(
+                bottom: 20,
+                right: 16,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'قصة: عمر واللعبة',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'تعلم كيف تطلب المساعدة بهدوء',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
@@ -221,68 +221,86 @@ class HomeScreen extends StatelessWidget {
   Widget _buildGridSection(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 26),
-      child: GridView.count(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
+      child: Column(
         children: [
-          _buildActivityCard(
-            context,
-            title: 'ألعاب',
-            emoji: '🧩',
-            bgColor: const Color(0xFFFFF5EB),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const GamesMenuScreen(),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildActivityCard(
+                    context,
+                    title: 'ألعاب',
+                    emoji: '🧩',
+                    bgColor: const Color(0xFFFFF5EB),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const GamesMenuScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              );
-            },
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildActivityCard(
+                    context,
+                    title: 'هدوء',
+                    emoji: '🍃',
+                    bgColor: const Color(0xFFE6FFFA),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RelaxationCornerScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-          _buildActivityCard(
-            context,
-            title: 'هدوء',
-            emoji: '🍃',
-            bgColor: const Color(0xFFE6FFFA),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const RelaxationCornerScreen(),
+          const SizedBox(height: 16),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildActivityCard(
+                    context,
+                    title: 'تلوين',
+                    emoji: '🎨',
+                    bgColor: const Color(0xFFEBF8FF),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ColoringMenuScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              );
-            },
-          ),
-          _buildActivityCard(
-            context,
-            title: 'تلوين',
-            emoji: '🎨',
-            bgColor: const Color(0xFFEBF8FF),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ColoringMenuScreen(),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: _buildActivityCard(
+                    context,
+                    title: 'مشاعر',
+                    emoji: '😊',
+                    bgColor: const Color(0xFFFDF2F8),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DailyEmotionTrackingScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              );
-            },
-          ),
-          _buildActivityCard(
-            context,
-            title: 'مشاعر',
-            emoji: '😊',
-            bgColor: const Color(0xFFFDF2F8),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DailyEmotionTrackingScreen(),
-                ),
-              );
-            },
+              ],
+            ),
           ),
         ],
       ),

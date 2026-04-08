@@ -88,28 +88,27 @@ class DailyEmotionSuccessDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 48),
-            InkWell(
-              onTap: () {
-                // Pop the dialog
-                Navigator.pop(context);
-                // Return to home screen
-                Navigator.popUntil(context, (route) => route.isFirst);
-              },
-              borderRadius: BorderRadius.circular(34),
-              child: Container(
-                width: 297,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF5D9CEC),
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: Material(
+                color: const Color(0xFF5D9CEC),
+                borderRadius: BorderRadius.circular(34),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
                   borderRadius: BorderRadius.circular(34),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  'العودة للرئيسية 🏠',
-                  style: GoogleFonts.readexPro(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                  child: Center(
+                    child: Text(
+                      'العودة للرئيسية 🏠',
+                      style: GoogleFonts.readexPro(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
