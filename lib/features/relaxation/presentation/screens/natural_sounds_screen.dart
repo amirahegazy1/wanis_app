@@ -8,16 +8,13 @@ class NaturalSoundsScreen extends StatefulWidget {
 }
 
 class _NaturalSoundsScreenState extends State<NaturalSoundsScreen> {
-  // Mock state for currently playing sound ID
   String? _playingSoundId;
 
   void _togglePlay(String id) {
     setState(() {
       if (_playingSoundId == id) {
-        // Pause if already playing
         _playingSoundId = null;
       } else {
-        // Play new
         _playingSoundId = id;
       }
     });
@@ -34,7 +31,6 @@ class _NaturalSoundsScreenState extends State<NaturalSoundsScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 16),
-              // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -61,17 +57,13 @@ class _NaturalSoundsScreenState extends State<NaturalSoundsScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 40),
-
-              // Sounds List
+              const SizedBox(height: 32),
               _buildSoundCard(
                 id: 'rain',
                 title: 'صوت المطر',
                 subtitle: 'للاسترخاء والنوم',
                 emoji: '🌧️',
-                iconBgColor: const Color(0xFF38B2AC),
-                bgColor: Colors.white,
-                borderColor: const Color(0xFFE2E8F0),
+                iconBgColor: const Color(0xFFE6FFFA),
               ),
               const SizedBox(height: 16),
               _buildSoundCard(
@@ -80,8 +72,6 @@ class _NaturalSoundsScreenState extends State<NaturalSoundsScreen> {
                 subtitle: 'زقزقة عصافير',
                 emoji: '🌲',
                 iconBgColor: const Color(0xFFF0FFF4),
-                bgColor: Colors.white,
-                borderColor: const Color(0xFFE2E8F0),
               ),
               const SizedBox(height: 16),
               _buildSoundCard(
@@ -90,8 +80,6 @@ class _NaturalSoundsScreenState extends State<NaturalSoundsScreen> {
                 subtitle: 'صوت الأمواج',
                 emoji: '🌊',
                 iconBgColor: const Color(0xFFEBF8FF),
-                bgColor: Colors.white,
-                borderColor: const Color(0xFFE2E8F0),
               ),
             ],
           ),
@@ -106,90 +94,91 @@ class _NaturalSoundsScreenState extends State<NaturalSoundsScreen> {
     required String subtitle,
     required String emoji,
     required Color iconBgColor,
-    required Color bgColor,
-    required Color borderColor,
   }) {
     final isPlaying = _playingSoundId == id;
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isPlaying ? const Color(0xFF319795) : borderColor, width: isPlaying ? 2 : 1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+    return GestureDetector(
+      onTap: () => _togglePlay(id),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: isPlaying ? const Color(0xFF319795) : const Color(0xFFE2E8F0),
+            width: isPlaying ? 2 : 1,
           ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Play button
-          GestureDetector(
-            onTap: () => _togglePlay(id),
-            child: Container(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
               width: 48,
               height: 48,
               decoration: BoxDecoration(
                 color: isPlaying ? const Color(0xFF319795) : Colors.white,
                 shape: BoxShape.circle,
-                border: Border.all(color: isPlaying ? Colors.transparent : const Color(0xFFE2E8F0)),
+                border: Border.all(
+                  color: isPlaying ? Colors.transparent : const Color(0xFFE2E8F0),
+                ),
               ),
               child: Icon(
                 isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
                 color: isPlaying ? Colors.white : const Color(0xFF2D3748),
               ),
             ),
-          ),
-          
-          // Details and Icon
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2D3748),
-                      ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF2D3748),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFFA0AEC0),
-                      ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFFA0AEC0),
                     ),
-                  ],
-                ),
-                const SizedBox(width: 16),
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: iconBgColor,
-                    borderRadius: BorderRadius.circular(16),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    emoji,
-                    style: const TextStyle(fontSize: 28),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 12),
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                color: iconBgColor,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                emoji,
+                style: const TextStyle(fontSize: 28),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
