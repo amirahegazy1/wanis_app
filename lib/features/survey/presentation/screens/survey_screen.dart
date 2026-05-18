@@ -56,17 +56,33 @@ class _SurveyScreenState extends State<SurveyScreen> {
       if (user != null) {
         final firestoreService = FirestoreService();
         
-        final surveyData = _answers.map((key, value) => MapEntry(key.toString(), value));
+        final surveyData = _answers.map((key, value) => MapEntry('q${key + 1}', value));
         
-        final newChild = ChildProfile(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          name: 'طفلي',
-          age: 0,
-          avatarUrl: '',
-          surveyResponses: surveyData,
-        );
-
-        await firestoreService.addChildProfile(user.uid, newChild);
+        // Try to update the existing child profile created during onboarding.
+        final existingChildren = await firestoreService.getChildProfiles(user.uid);
+        
+        if (existingChildren.isNotEmpty) {
+          final child = existingChildren.first;
+          final updatedChild = ChildProfile(
+            id: child.id,
+            name: child.name,
+            age: child.age,
+            avatarUrl: child.avatarUrl,
+            surveyResponses: surveyData,
+          );
+          await firestoreService.updateChildProfile(user.uid, updatedChild);
+        } else {
+          // Fallback: create a new child profile if none exists
+          final newChild = ChildProfile(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            name: '\u0637\u0641\u0644\u064a',
+            age: 4,
+            avatarUrl: '1',
+            surveyResponses: surveyData,
+          );
+          await firestoreService.addChildProfile(user.uid, newChild);
+        }
+        
         await firestoreService.markSurveyCompleted(user.uid);
       }
     } catch (e) {
@@ -179,7 +195,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                           child: Container(
                             margin: const EdgeInsets.symmetric(vertical: 24.0),
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.primaryContainer.withOpacity(0.3),
+                              color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                               shape: BoxShape.circle,
                             ),
                             child: Center(
@@ -231,7 +247,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     offset: const Offset(0, -4),
                     blurRadius: 16,
                   ),

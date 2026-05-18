@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../services/firestore_service.dart';
 import '../../../../models/parent_user.dart';
+import '../../../../models/child_profile.dart';
 import 'onboarding_account_success_screen.dart';
 import 'onboarding_shared.dart';
 
@@ -33,6 +34,7 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
 
     try {
       final firestoreService = FirestoreService();
+      final childName = _childNameController.text.trim();
 
       // Create the ParentUser document in Firestore so that
       // AppEntryScreen can later find it and check hasCompletedSurvey.
@@ -42,8 +44,17 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
         name: user.displayName ?? '',
       );
       await firestoreService.createParentUser(parentUser);
+
+      // Create the ChildProfile with name & avatar from onboarding.
+      final childProfile = ChildProfile(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        name: childName.isNotEmpty ? childName : 'طفلي',
+        age: 4,
+        avatarUrl: '$_selectedAvatar',
+      );
+      await firestoreService.addChildProfile(user.uid, childProfile);
     } catch (e) {
-      debugPrint('Error creating parent user: $e');
+      debugPrint('Error creating parent user / child profile: $e');
     }
 
     if (!mounted) return;
