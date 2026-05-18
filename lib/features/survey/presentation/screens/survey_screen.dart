@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../services/firestore_service.dart';
 import '../../../../models/child_profile.dart';
-import '../../../home/presentation/screens/main_navigation_screen.dart';
+import '../../../levels/presentation/screens/levels_screen.dart';
 import '../../models/survey_question.dart';
 import '../widgets/survey_option_button.dart';
 
@@ -77,7 +77,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
       Navigator.of(context).pop(); // pop loading dialog
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => const MainNavigationScreen(),
+          builder: (_) => const LevelsScreen(),
         ),
       );
     }

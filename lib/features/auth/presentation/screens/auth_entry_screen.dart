@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../home/presentation/screens/main_navigation_screen.dart';
+import '../../../levels/presentation/screens/levels_screen.dart';
 import '../../../survey/presentation/screens/survey_screen.dart';
 import '../../../../services/firestore_service.dart';
 
 /// Entry screen loaded after authentication.
 ///
-/// Routes the authenticated user conditionally to the [SurveyScreen] or [MainNavigationScreen].
+/// Routes the authenticated user conditionally to the [SurveyScreen] or [LevelsScreen].
 class AppEntryScreen extends StatelessWidget {
   const AppEntryScreen({super.key});
 
@@ -37,7 +37,7 @@ class AppEntryScreen extends StatelessWidget {
         final parentUser = snapshot.data;
         
         if (parentUser != null && parentUser.hasCompletedSurvey) {
-          return const MainNavigationScreen();
+          return const LevelsScreen();
         }
 
         return const SurveyScreen();

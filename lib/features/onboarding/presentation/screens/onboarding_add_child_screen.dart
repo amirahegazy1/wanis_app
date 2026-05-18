@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../../services/firestore_service.dart';
+import '../../../../models/parent_user.dart';
 import 'onboarding_account_success_screen.dart';
 import 'onboarding_shared.dart';
 
@@ -13,6 +16,45 @@ class OnboardingAddChildScreen extends StatefulWidget {
 
 class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
   int _selectedAvatar = 1;
+  final _childNameController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _childNameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _startJourney() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      final firestoreService = FirestoreService();
+
+      // Create the ParentUser document in Firestore so that
+      // AppEntryScreen can later find it and check hasCompletedSurvey.
+      final parentUser = ParentUser(
+        id: user.uid,
+        email: user.email ?? '',
+        name: user.displayName ?? '',
+      );
+      await firestoreService.createParentUser(parentUser);
+    } catch (e) {
+      debugPrint('Error creating parent user: $e');
+    }
+
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const OnboardingAccountSuccessScreen()),
+      (_) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +117,10 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                const OnboardingInput(hint: 'اكتب اسم الطفل هنا...'),
+                OnboardingInput(
+                  hint: 'اكتب اسم الطفل هنا...',
+                  controller: _childNameController,
+                ),
                 const SizedBox(height: 24),
                 // "اختر شخصية:" – Figma: 16px Bold
                 Align(
@@ -119,14 +164,8 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
                 OnboardingPrimaryButton(
                   label: 'ابدأ الرحلة 🚀',
                   color: OnboardingColors.accentOrange,
-                  onTap: () {
-                    // TODO: Save child name & avatar via BLoC/repository
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const OnboardingAccountSuccessScreen()),
-                      (_) => false,
-                    );
-                  },
+                  isLoading: _isLoading,
+                  onTap: _startJourney,
                 ),
           ],
         ),
