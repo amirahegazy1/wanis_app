@@ -254,7 +254,7 @@ class _ChildDataScreenState extends State<ChildDataScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildInfoChip(Icons.cake_outlined, '${child.age} سنوات'),
+              _buildInfoChip(Icons.cake_outlined, child.ageCategory),
               const SizedBox(width: 12),
               _buildInfoChip(
                 Icons.assignment_outlined,

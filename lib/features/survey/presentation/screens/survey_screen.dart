@@ -66,7 +66,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
           final updatedChild = ChildProfile(
             id: child.id,
             name: child.name,
-            age: child.age,
+            ageCategory: child.ageCategory,
             avatarUrl: child.avatarUrl,
             surveyResponses: surveyData,
           );
@@ -76,7 +76,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
           final newChild = ChildProfile(
             id: DateTime.now().millisecondsSinceEpoch.toString(),
             name: '\u0637\u0641\u0644\u064a',
-            age: 4,
+            ageCategory: '3-5 سنوات',
             avatarUrl: '1',
             surveyResponses: surveyData,
           );

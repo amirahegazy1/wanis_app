@@ -1,14 +1,14 @@
 class ChildProfile {
   final String id;
   final String name;
-  final int age;
+  final String ageCategory;
   final String avatarUrl;
   final Map<String, int> surveyResponses;
 
   ChildProfile({
     required this.id,
     required this.name,
-    required this.age,
+    required this.ageCategory,
     required this.avatarUrl,
     this.surveyResponses = const {},
   });
@@ -17,7 +17,7 @@ class ChildProfile {
     return ChildProfile(
       id: documentId,
       name: data['name'] ?? '',
-      age: data['age'] ?? 0,
+      ageCategory: data['ageCategory'] ?? '',
       avatarUrl: data['avatarUrl'] ?? '',
       surveyResponses: data['surveyResponses'] != null 
           ? Map<String, int>.from(data['surveyResponses']) 
@@ -28,7 +28,7 @@ class ChildProfile {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'age': age,
+      'ageCategory': ageCategory,
       'avatarUrl': avatarUrl,
       'surveyResponses': surveyResponses,
     };

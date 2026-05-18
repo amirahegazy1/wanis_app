@@ -6,6 +6,7 @@ import '../../../onboarding/presentation/screens/onboarding_splash_screen.dart';
 import '../../../parent/presentation/screens/math_gate_screen.dart';
 import '../../../parent/presentation/screens/child_data_screen.dart';
 import '../../../parent/presentation/screens/progress_reports_screen.dart';
+import '../../../mimicry/presentation/screens/mimicry_sessions_screen.dart';
 
 /// Levels Screen – the main screen of the Wanis application.
 ///
@@ -227,7 +228,10 @@ class LevelsScreen extends StatelessWidget {
   Widget _buildOpenLevel(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // TODO: Navigate to level 1 sessions
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const MimicrySessionsScreen()),
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(20),

@@ -17,6 +17,7 @@ class OnboardingAddChildScreen extends StatefulWidget {
 
 class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
   int _selectedAvatar = 1;
+  String _selectedAgeCategory = '3-5 سنوات';
   final _childNameController = TextEditingController();
   bool _isLoading = false;
 
@@ -49,7 +50,7 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
       final childProfile = ChildProfile(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: childName.isNotEmpty ? childName : 'طفلي',
-        age: 4,
+        ageCategory: _selectedAgeCategory,
         avatarUrl: '$_selectedAvatar',
       );
       await firestoreService.addChildProfile(user.uid, childProfile);
@@ -131,6 +132,48 @@ class _OnboardingAddChildScreenState extends State<OnboardingAddChildScreen> {
                 OnboardingInput(
                   hint: 'اكتب اسم الطفل هنا...',
                   controller: _childNameController,
+                ),
+                const SizedBox(height: 24),
+                // "الفئة العمرية:"
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'الفئة العمرية:',
+                    style: readexPro(
+                      color: OnboardingColors.dark,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: _AgeCategoryOption(
+                        label: '3-5 سنوات',
+                        selected: _selectedAgeCategory == '3-5 سنوات',
+                        onTap: () => setState(() => _selectedAgeCategory = '3-5 سنوات'),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _AgeCategoryOption(
+                        label: '6-8 سنوات',
+                        selected: _selectedAgeCategory == '6-8 سنوات',
+                        onTap: () => setState(() => _selectedAgeCategory = '6-8 سنوات'),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _AgeCategoryOption(
+                        label: '9-12 سنة',
+                        selected: _selectedAgeCategory == '9-12 سنة',
+                        onTap: () => setState(() => _selectedAgeCategory = '9-12 سنة'),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 24),
                 // "اختر شخصية:" – Figma: 16px Bold
@@ -227,6 +270,45 @@ class _AvatarOption extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _AgeCategoryOption extends StatelessWidget {
+  const _AgeCategoryOption({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: selected ? OnboardingColors.primaryBlue.withValues(alpha: 0.1) : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: selected ? OnboardingColors.primaryBlue : const Color(0xFFE2E8F0),
+            width: selected ? 2 : 1,
+          ),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: readexPro(
+            color: selected ? OnboardingColors.primaryBlue : OnboardingColors.muted,
+            fontSize: 14,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+          ),
+        ),
       ),
     );
   }
