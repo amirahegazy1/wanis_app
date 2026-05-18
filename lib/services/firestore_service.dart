@@ -18,6 +18,12 @@ class FirestoreService {
     return null;
   }
 
+  Future<void> markSurveyCompleted(String parentId) async {
+    await _db.collection('parents').doc(parentId).update({
+      'hasCompletedSurvey': true,
+    });
+  }
+
   // ChildProfile Operations
   Future<void> addChildProfile(String parentId, ChildProfile child) async {
     final docRef = _db

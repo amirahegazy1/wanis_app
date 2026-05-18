@@ -3,12 +3,14 @@ class ParentUser {
   final String email;
   final String name;
   final List<String> childProfileIds;
+  final bool hasCompletedSurvey;
 
   ParentUser({
     required this.id,
     required this.email,
     required this.name,
     this.childProfileIds = const [],
+    this.hasCompletedSurvey = false,
   });
 
   factory ParentUser.fromMap(Map<String, dynamic> data, String documentId) {
@@ -17,6 +19,7 @@ class ParentUser {
       email: data['email'] ?? '',
       name: data['name'] ?? '',
       childProfileIds: List<String>.from(data['childProfileIds'] ?? []),
+      hasCompletedSurvey: data['hasCompletedSurvey'] ?? false,
     );
   }
 
@@ -25,6 +28,7 @@ class ParentUser {
       'email': email,
       'name': name,
       'childProfileIds': childProfileIds,
+      'hasCompletedSurvey': hasCompletedSurvey,
     };
   }
 }
