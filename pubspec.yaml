@@ -82,6 +82,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/level2/
     - assets/videos/
     - assets/models/
 

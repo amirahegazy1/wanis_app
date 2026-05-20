@@ -7,7 +7,7 @@ import '../../../parent/presentation/screens/math_gate_screen.dart';
 import '../../../parent/presentation/screens/child_data_screen.dart';
 import '../../../parent/presentation/screens/progress_reports_screen.dart';
 import '../../../mimicry/presentation/screens/mimicry_sessions_screen.dart';
-
+import 'level_2/tool_usage_activity_screen.dart';
 /// Levels Screen – the main screen of the Wanis application.
 ///
 /// Displayed after account creation + survey, and on every subsequent
@@ -212,26 +212,30 @@ class LevelsScreen extends StatelessWidget {
   Widget _buildLevelsRoadmap(BuildContext context) {
     return Column(
       children: [
-        _buildOpenLevel(context),
+        _buildOpenLevel(context, levelNumber: 1, title: 'التقليد', icon: Icons.sentiment_satisfied_alt, targetScreen: const MimicrySessionsScreen()),
         const SizedBox(height: 16),
-        _buildLockedLevel(levelNumber: 2, title: 'استخدام الأدوات', icon: Icons.build_outlined),
+        _buildOpenLevel(context, levelNumber: 2, title: 'استخدام الأدوات', icon: Icons.build_outlined, targetScreen: const ToolUsageActivityScreen()),
         const SizedBox(height: 16),
-        _buildLockedLevel(levelNumber: 3, title: 'تنفيذ الأوامر', icon: Icons.check_circle_outline),
+        _buildOpenLevel(context, levelNumber: 3, title: 'تنفيذ الأوامر', icon: Icons.check_circle_outline, targetScreen: null),
         const SizedBox(height: 16),
-        _buildLockedLevel(levelNumber: 4, title: 'مهارات اجتماعية', icon: Icons.people_outline),
+        _buildOpenLevel(context, levelNumber: 4, title: 'مهارات اجتماعية', icon: Icons.people_outline, targetScreen: null),
       ],
     );
   }
 
   // ── Level 1: Open ───────────────────────────────────────────────
 
-  Widget _buildOpenLevel(BuildContext context) {
+  Widget _buildOpenLevel(BuildContext context, {required int levelNumber, required String title, required IconData icon, required Widget? targetScreen}) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const MimicrySessionsScreen()),
-        );
+        if (targetScreen != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => targetScreen),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('سيتم إضافة $title قريباً')));
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -264,9 +268,9 @@ class LevelsScreen extends StatelessWidget {
                   width: 1,
                 ),
               ),
-              child: const Center(
+              child: Center(
                 child: Icon(
-                  Icons.sentiment_satisfied_alt,
+                  icon,
                   size: 28,
                   color: _primaryBlue,
                 ),
@@ -280,7 +284,7 @@ class LevelsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'المستوى 1',
+                    'المستوى $levelNumber',
                     style: _cairo(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -288,7 +292,7 @@ class LevelsScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'التقليد',
+                    title,
                     style: _cairo(
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
