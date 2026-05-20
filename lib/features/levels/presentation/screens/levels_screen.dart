@@ -9,6 +9,7 @@ import '../../../parent/presentation/screens/progress_reports_screen.dart';
 import '../../../mimicry/presentation/screens/mimicry_sessions_screen.dart';
 import 'level_2/tool_usage_activity_screen.dart';
 import 'level_3/level_3_sequence_manager.dart';
+import 'level_4/level_4_sequence_manager.dart';
 /// Levels Screen – the main screen of the Wanis application.
 ///
 /// Displayed after account creation + survey, and on every subsequent
@@ -219,7 +220,7 @@ class LevelsScreen extends StatelessWidget {
         const SizedBox(height: 16),
         _buildOpenLevel(context, levelNumber: 3, title: 'تنفيذ الأوامر', icon: Icons.check_circle_outline, targetScreen: const Level3SequenceManager()),
         const SizedBox(height: 16),
-        _buildOpenLevel(context, levelNumber: 4, title: 'مهارات اجتماعية', icon: Icons.people_outline, targetScreen: null),
+        _buildOpenLevel(context, levelNumber: 4, title: 'مهارات اجتماعية', icon: Icons.people_outline, targetScreen: const Level4SequenceManager()),
       ],
     );
   }
