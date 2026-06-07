@@ -11,6 +11,15 @@ dependencies:
   tflite_flutter: ^0.12.1
   image: ^4.1.7
   shared_preferences: ^2.2.3
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/logo_foreground.png"
+  remove_alpha_ios: true
 
   flutter_localiztions:
     sdk: flutter
