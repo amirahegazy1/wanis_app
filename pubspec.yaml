@@ -7,6 +7,10 @@ dependencies:
   google_sign_in: ^7.2.0
   sign_in_with_apple: ^7.0.1
   video_player: ^2.8.3
+  camera: ^0.11.0+2
+  tflite_flutter: ^0.12.1
+  image: ^4.1.7
+  shared_preferences: ^2.2.3
 
   flutter_localiztions:
     sdk: flutter
@@ -15,6 +19,7 @@ dependencies:
     uses-material-design: true
   assets:
     - assets/videos
+    - assets/models/
     - assets/images/
     - assets/images/level2
     - assets/images/level3
