@@ -18,6 +18,7 @@ dependencies:
     - assets/images/
     - assets/images/level2
     - assets/images/level3
+    - assets/images/level4
 
   cupertino_icons: ^1.0.8
 
